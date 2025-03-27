@@ -1,0 +1,95 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+// models.prisma
+
+model User {
+    id               String     @id @default(uuid())
+    name             String
+    email            String     @unique
+    password         String
+    phone            String?
+    role             Role       @default(USER)
+    listings         Listing[]
+    sentMessages     Message[]  @relation(name: "SentMessages")
+    receivedMessages Message[]  @relation(name: "ReceivedMessages")
+    favorites        Favorite[]
+    createdAt        DateTime   @default(now())
+    Report           Report[]
+}
+
+enum Role {
+    USER
+    ADMIN
+}
+
+model Listing {
+    id          String      @id @default(uuid())
+    title       String
+    description String
+    price       Int
+    mileage     Int
+    fuelType    FuelType
+    gearbox     GearboxType
+    location    String
+    images      String[]
+    seller      User        @relation(fields: [sellerId], references: [id])
+    sellerId    String
+    createdAt   DateTime    @default(now())
+    Favorite    Favorite[]
+    Report      Report[]
+}
+
+enum FuelType {
+    GASOLINE
+    DIESEL
+    ELECTRIC
+    HYBRID
+}
+
+enum GearboxType {
+    MANUAL
+    AUTOMATIC
+}
+
+model Message {
+    id         String   @id @default(uuid())
+    sender     User     @relation(name: "SentMessages", fields: [senderId], references: [id])
+    senderId   String
+    receiver   User     @relation(name: "ReceivedMessages", fields: [receiverId], references: [id])
+    receiverId String
+    content    String
+    createdAt  DateTime @default(now())
+}
+
+model Favorite {
+    id        String   @id @default(uuid())
+    user      User     @relation(fields: [userId], references: [id])
+    userId    String
+    listing   Listing  @relation(fields: [listingId], references: [id])
+    listingId String
+    createdAt DateTime @default(now())
+}
+
+model Report {
+    id         String       @id @default(uuid())
+    reporter   User         @relation(fields: [reporterId], references: [id])
+    reporterId String
+    listing    Listing?     @relation(fields: [listingId], references: [id])
+    listingId  String?
+    reason     String
+    status     ReportStatus @default(PENDING)
+    createdAt  DateTime     @default(now())
+}
+
+enum ReportStatus {
+    PENDING
+    REVIEWED
+    REJECTED
+}
