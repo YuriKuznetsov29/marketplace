@@ -10,10 +10,16 @@
         "lint:fix": "next lint --fix",
         "format": "npx prettier . --write",
         "prisma:push": "npx prisma db push",
-        "prisma:studio": "npx prisma studio"
+        "prisma:studio": "npx prisma studio",
+        "prisma:seed": "npx prisma db seed"
+    },
+    "prisma": {
+        "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
     },
     "dependencies": {
         "@prisma/client": "^6.5.0",
+        "@radix-ui/react-checkbox": "^1.2.2",
+        "@radix-ui/react-slider": "^1.3.2",
         "@radix-ui/react-slot": "^1.1.2",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
@@ -36,6 +42,7 @@
         "eslint-config-prettier": "^10.1.1",
         "prettier": "3.5.3",
         "tailwindcss": "^4",
+        "ts-node": "^10.9.2",
         "typescript": "^5"
     }
 }

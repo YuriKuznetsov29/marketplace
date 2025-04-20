@@ -21,7 +21,7 @@ model User {
     receivedMessages Message[]  @relation(name: "ReceivedMessages")
     favorites        Favorite[]
     createdAt        DateTime   @default(now())
-    Report           Report[]
+    reports          Report[]   @relation("UserReports")
 }
 
 enum Role {
@@ -41,9 +41,13 @@ model Listing {
     images      String[]
     seller      User        @relation(fields: [sellerId], references: [id])
     sellerId    String
+    brand       Brand       @relation(fields: [brandId], references: [id])
+    brandId     String
+    model       Model       @relation(fields: [modelId], references: [id])
+    modelId     String
     createdAt   DateTime    @default(now())
-    Favorite    Favorite[]
-    Report      Report[]
+    favorites   Favorite[]
+    reports     Report[]
 }
 
 enum FuelType {
@@ -79,7 +83,7 @@ model Favorite {
 
 model Report {
     id         String       @id @default(uuid())
-    reporter   User         @relation(fields: [reporterId], references: [id])
+    reporter   User         @relation("UserReports", fields: [reporterId], references: [id])
     reporterId String
     listing    Listing?     @relation(fields: [listingId], references: [id])
     listingId  String?
@@ -92,4 +96,19 @@ enum ReportStatus {
     PENDING
     REVIEWED
     REJECTED
+}
+
+model Brand {
+    id       String    @id @default(uuid())
+    name     String
+    models   Model[]
+    listings Listing[]
+}
+
+model Model {
+    id       String    @id @default(uuid())
+    name     String
+    brand    Brand     @relation(fields: [brandId], references: [id])
+    brandId  String
+    listings Listing[]
 }
