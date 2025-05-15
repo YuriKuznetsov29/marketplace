@@ -1,27 +1,41 @@
 import { Api } from '@/services/api-client'
 import { Brand, Model } from '@prisma/client'
-import { useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { useEffect, useMemo, useState } from 'react'
+import { useSet } from 'react-use'
 
-type ReturnProps = {
-    brands: Brand[]
-    models: Model[]
+export interface Filters {
+    selectedBrands: Set<string>
+    selectedModels: Set<string>
 }
 
 type Props = {
-    brandId: string
+    brandIds: string[]
 }
 
-export const useFilters = ({ brandId }: Props): ReturnProps => {
-    const [brands, setBrands] = useState<Brand[]>([])
-    const [models, setModels] = useState<Model[]>([])
+interface ReturnProps extends Filters {
+    setBrands: (value: string) => void
+    setModels: (value: string) => void
+}
 
-    useEffect(() => {
-        Api.filters.getBrands().then(setBrands)
-    }, [])
+export const useFilters = (): ReturnProps => {
+    const searchParams = useSearchParams()
 
-    useEffect(() => {
-        Api.filters.getModels(brandId).then(setModels)
-    }, [brandId])
+    const [selectedBrands, { toggle: toggleBrands }] = useSet(
+        new Set<string>(searchParams.get('brands')?.split(','))
+    )
 
-    return { brands, models }
+    const [selectedModels, { toggle: toggleModels }] = useSet(
+        new Set<string>(searchParams.get('models')?.split(','))
+    )
+
+    return useMemo(
+        () => ({
+            selectedBrands,
+            selectedModels,
+            setBrands: toggleBrands,
+            setModels: toggleModels,
+        }),
+        [selectedBrands, selectedModels, toggleBrands, toggleModels]
+    )
 }

@@ -1,0 +1,28 @@
+import React from 'react'
+import qs from 'qs'
+import { useRouter } from 'next/navigation'
+import { Filters } from './useFilters'
+
+export const useQueryFilters = (filters: Filters) => {
+    const isMounted = React.useRef(false)
+    const router = useRouter()
+
+    React.useEffect(() => {
+        if (isMounted.current) {
+            const params = {
+                brands: Array.from(filters.selectedBrands),
+                models: Array.from(filters.selectedModels),
+            }
+
+            const query = qs.stringify(params, {
+                arrayFormat: 'comma',
+            })
+
+            router.push(`?${query}`, {
+                scroll: false,
+            })
+        }
+
+        isMounted.current = true
+    }, [filters])
+}
