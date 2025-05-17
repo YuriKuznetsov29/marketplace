@@ -10,8 +10,10 @@ export const useQueryFilters = (filters: Filters) => {
     React.useEffect(() => {
         if (isMounted.current) {
             const params = {
+                ...filters.prices,
                 brands: Array.from(filters.selectedBrands),
                 models: Array.from(filters.selectedModels),
+                fuelType: Array.from(filters.fuelType),
             }
 
             const query = qs.stringify(params, {
