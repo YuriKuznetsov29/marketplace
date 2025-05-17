@@ -2,16 +2,6 @@
 
 import { cn } from '@/lib/utils'
 import React, { useState } from 'react'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-    SelectLabel,
-    SelectGroup,
-} from '@/components/ui/select'
-
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Button } from '@/components/ui/button'
@@ -22,20 +12,11 @@ import { useFiltersBrands } from '@/hooks/useFiltersBrands'
 import { useFiltersModels } from '@/hooks/useFiltersModels'
 import { useQueryFilters } from '@/hooks/useQueryFilters'
 
-const options = [
-    { label: 'React', value: 'react' },
-    { label: 'Next.js', value: 'next' },
-    { label: 'Tailwind', value: 'tailwind' },
-    { label: 'TypeScript', value: 'ts' },
-]
-
 interface Props {
     className?: string
 }
 
 export const Filters: React.FC = ({ className }: Props) => {
-    const [brandId, setBrandId] = React.useState<string>('')
-    const [selected, setSelected] = useState<Brand[]>([])
     const [open, setOpen] = useState(false)
 
     const [openModel, setOpenModel] = useState(false)
@@ -46,21 +27,15 @@ export const Filters: React.FC = ({ className }: Props) => {
 
     useQueryFilters(filters)
 
-    const toggleOption = (brand: Brand) => {
-        setSelected((prev) =>
-            prev.includes(brand) ? prev.filter((v) => v !== brand) : [...prev, brand]
-        )
-    }
-
     console.log(filters.selectedBrands)
 
     return (
         <div className={cn('flex flex-col gap-2', className)}>
             <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
-                    <Button variant="outline" className="w-64 justify-start">
-                        {selected.length > 0
-                            ? selected.map((brand) => brand.name).join(', ')
+                    <Button variant="outline" className="w-64 block truncate text-left">
+                        {filters.selectedBrands.size > 0
+                            ? Array.from(filters.selectedBrands).join(', ')
                             : 'Select brands'}
                     </Button>
                 </PopoverTrigger>
@@ -90,13 +65,13 @@ export const Filters: React.FC = ({ className }: Props) => {
             {models.length > 0 && (
                 <Popover open={openModel} onOpenChange={setOpenModel}>
                     <PopoverTrigger asChild>
-                        <Button variant="outline" className="w-64 justify-start">
+                        <Button variant="outline" className="w-64 block truncate text-left">
                             {filters.selectedModels.size > 0
                                 ? Array.from(filters.selectedModels).join(', ')
                                 : 'Select models'}
                         </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-64 p-2 max-h-[200px] overflow-y-scroll">
+                    <PopoverContent className="w-64 p-2 max-h-[200px] overflow-y-auto">
                         <div className="flex flex-col space-y-2">
                             {models.map((model) => (
                                 <div key={model.id} className="flex items-center space-x-2">
@@ -117,38 +92,6 @@ export const Filters: React.FC = ({ className }: Props) => {
                     </PopoverContent>
                 </Popover>
             )}
-            {/* <Select onValueChange={setBrandId}>
-                <SelectGroup>
-                    <SelectLabel>Марка</SelectLabel>
-                    <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Любая" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {brands.map(({ id, name }) => (
-                            <SelectItem key={id} value={id}>
-                                {name}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </SelectGroup>
-            </Select>
-            {models.length > 0 && (
-                <Select>
-                    <SelectGroup>
-                        <SelectLabel>Модель</SelectLabel>
-                        <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Любая" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {models.map(({ id, name }) => (
-                                <SelectItem key={id} value={id}>
-                                    {name}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </SelectGroup>
-                </Select>
-            )} */}
         </div>
     )
 }
