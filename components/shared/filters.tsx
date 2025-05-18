@@ -137,18 +137,36 @@ export const Filters: React.FC = ({ className }: Props) => {
             <div className="flex flex-col gap-2">
                 <Label htmlFor={'price'}>Пробег, км</Label>
                 <div className="flex gap-2">
-                    <Input placeholder="от" />
-                    <Input placeholder="до" />
+                    <Input
+                        placeholder="от"
+                        type="number"
+                        value={String(filters.mileage.mileageFrom)}
+                        onChange={(e) => filters.setMileage('mileageFrom', Number(e.target.value))}
+                    />
+                    <Input
+                        placeholder="до"
+                        type="number"
+                        value={String(filters.mileage.mileageTo)}
+                        onChange={(e) => filters.setMileage('mileageTo', Number(e.target.value))}
+                    />
                 </div>
             </div>
             <div className="flex flex-col gap-2">
                 <Label htmlFor={'price'}>Коробка передач</Label>
                 <div className="flex items-center space-x-2">
-                    <Checkbox id="manual" value={'manual'} onCheckedChange={() => {}} />
+                    <Checkbox
+                        id="manual"
+                        value={'manual'}
+                        onCheckedChange={() => filters.setGearbox('MANUAL')}
+                    />
                     <label htmlFor={`manual`}>Механика</label>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <Checkbox id="auto" value={'auto'} onCheckedChange={() => {}} />
+                    <Checkbox
+                        id="auto"
+                        value={'auto'}
+                        onCheckedChange={() => filters.setGearbox('AUTOMATIC')}
+                    />
                     <label htmlFor={`auto`}>Автоматическая</label>
                 </div>
             </div>

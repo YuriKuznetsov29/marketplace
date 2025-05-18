@@ -7,19 +7,21 @@ export default async function Home({ searchParams }: { searchParams: Promise<Get
     const listings = await findCars(searchParams)
 
     return (
-        <div className="h-screen flex justify-center items-center ">
+        <>
             <main className="w-full">
                 <Container>
-                    <div className="w-full flex gap-4">
+                    <div className="w-full flex items-start gap-4">
                         <Filters />
-                        {listings.length > 0 &&
-                            listings.map((listing) => (
-                                <CarListing key={listing.id} listing={listing} />
-                            ))}
+                        <div className="w-full grid grid-cols-3 gap-4">
+                            {listings.length > 0 &&
+                                listings.map((listing) => (
+                                    <CarListing key={listing.id} listing={listing} />
+                                ))}
+                        </div>
                     </div>
                 </Container>
             </main>
             <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center"></footer>
-        </div>
+        </>
     )
 }

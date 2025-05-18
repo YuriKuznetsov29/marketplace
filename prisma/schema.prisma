@@ -35,6 +35,7 @@ model Listing {
     description String
     price       Int
     mileage     Int
+    year        Int
     fuelType    FuelType
     gearbox     GearboxType
     location    String

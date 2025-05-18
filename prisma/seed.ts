@@ -1,9 +1,7 @@
-// prisma/seed.ts
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
-    // Полный список марок и моделей
     const carBrands: Record<string, string[]> = {
         Toyota: ['Camry', 'Corolla', 'RAV4', 'Land Cruiser'],
         BMW: ['3 Series', '5 Series', 'X5', 'X3'],
@@ -17,56 +15,71 @@ async function main() {
         Kia: ['Rio', 'Cerato', 'Sportage', 'Sorento'],
     }
 
-    const brandEntries = await Promise.all(
-        Object.entries(carBrands).map(async ([brandName, modelNames]) => {
-            const brand = await prisma.brand.create({
-                data: {
-                    name: brandName,
-                    models: {
-                        create: modelNames.map((model) => ({ name: model })),
-                    },
-                },
-            })
-            return brand
-        })
-    )
+    const brands: Record<string, any> = {}
+    const models: Record<string, Record<string, any>> = {}
 
-    // Пользователи
+    for (const [brandName, modelNames] of Object.entries(carBrands)) {
+        const brand = await prisma.brand.create({
+            data: {
+                name: brandName,
+                models: {
+                    create: modelNames.map((name) => ({ name })),
+                },
+            },
+        })
+        brands[brandName] = brand
+        const createdModels = await prisma.model.findMany({ where: { brandId: brand.id } })
+        models[brandName] = {}
+        for (const model of createdModels) {
+            models[brandName][model.name] = model
+        }
+    }
+
     const users = await prisma.user.createMany({
         data: [
             { name: 'Alice', email: 'alice@example.com', password: 'hashedpass1' },
             { name: 'Bob', email: 'bob@example.com', password: 'hashedpass2' },
             { name: 'Charlie', email: 'charlie@example.com', password: 'hashedpass3' },
+            { name: 'Diana', email: 'diana@example.com', password: 'hashedpass4' },
+            { name: 'Ethan', email: 'ethan@example.com', password: 'hashedpass5' },
         ],
     })
 
     const createdUsers = await prisma.user.findMany()
+    const fuelTypes = ['GASOLINE', 'DIESEL', 'ELECTRIC', 'HYBRID']
+    const gearboxTypes = ['MANUAL', 'AUTOMATIC']
+    const cities = ['Москва', 'Санкт-Петербург', 'Новосибирск', 'Екатеринбург', 'Казань']
 
-    // Объявления (по 1 от каждого пользователя)
-    for (let i = 0; i < createdUsers.length; i++) {
-        const user = createdUsers[i]
-        const brand = brandEntries[i % brandEntries.length]
-        const model = await prisma.model.findFirst({
-            where: { brandId: brand.id },
+    const random = (arr: any[]) => arr[Math.floor(Math.random() * arr.length)]
+    const getRandomInt = (min: number, max: number) =>
+        Math.floor(Math.random() * (max - min + 1)) + min
+
+    for (let i = 0; i < 100; i++) {
+        const brandName = random(Object.keys(carBrands))
+        const modelName = random(carBrands[brandName])
+        const year = getRandomInt(2005, 2024)
+        const mileage = getRandomInt(10000, 250000)
+        const price = getRandomInt(3000, 80000)
+        const user = createdUsers[i % createdUsers.length]
+        const title = `${brandName} ${modelName} ${year}`
+        const description = `${brandName} ${modelName} ${year} года выпуска в отличном состоянии. Пробег — ${mileage} км. ${random(fuelTypes)}, коробка — ${random(gearboxTypes)}.`
+
+        await prisma.listing.create({
+            data: {
+                title,
+                description,
+                price,
+                mileage,
+                year,
+                fuelType: random(fuelTypes),
+                gearbox: random(gearboxTypes),
+                location: random(cities),
+                images: ['https://example.com/car.jpg'],
+                sellerId: user.id,
+                brandId: brands[brandName].id,
+                modelId: models[brandName][modelName].id,
+            },
         })
-
-        if (model) {
-            await prisma.listing.create({
-                data: {
-                    title: `${brand.name} ${model.name} от ${user.name}`,
-                    description: 'Хорошее состояние, своевременное обслуживание.',
-                    price: 10000 + i * 2500,
-                    mileage: 50000 + i * 10000,
-                    fuelType: 'GASOLINE',
-                    gearbox: 'AUTOMATIC',
-                    location: 'Москва',
-                    images: ['https://example.com/car.jpg'],
-                    sellerId: user.id,
-                    brandId: brand.id,
-                    modelId: model.id,
-                },
-            })
-        }
     }
 }
 

@@ -1,5 +1,5 @@
 import { Api } from '@/services/api-client'
-import { Brand, FuelType, Model } from '@prisma/client'
+import { Brand, FuelType, GearboxType, Model } from '@prisma/client'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import { useSet } from 'react-use'
@@ -9,25 +9,28 @@ export interface PriceProps {
     priceTo?: number
 }
 
-// export enum FuelType {
-//     Gasoline = 'Gasoline',
-//     Diesel = 'Diesel',
-//     Electric = 'Electric',
-//     Hybrid = 'Hybrid',
-// }
+export interface MileageProps {
+    mileageFrom?: number
+    mileageTo?: number
+}
 
-export interface QueryFilters extends PriceProps {
+export interface QueryFilters extends PriceProps, MileageProps {
     brands: string
     models: string
     prices: string
+    mileage: string
     fuelType: string
+    year: string
+    gearbox: string
 }
 
 export interface Filters {
     selectedBrands: Set<string>
     selectedModels: Set<string>
     prices: PriceProps
+    mileage: MileageProps
     fuelType: Set<string>
+    gearbox: Set<string>
 }
 
 interface ReturnProps extends Filters {
@@ -35,6 +38,8 @@ interface ReturnProps extends Filters {
     setModels: (value: string) => void
     setFuelType: (value: FuelType) => void
     setPrices: (name: keyof PriceProps, value: number) => void
+    setMileage: (name: keyof MileageProps, value: number) => void
+    setGearbox: (value: GearboxType) => void
 }
 
 export const useFilters = (): ReturnProps => {
@@ -46,6 +51,10 @@ export const useFilters = (): ReturnProps => {
 
     const [selectedModels, { toggle: toggleModels }] = useSet(
         new Set<string>(searchParams.get('models')?.split(','))
+    )
+
+    const [gearbox, { toggle: toggleGearbox }] = useSet(
+        new Set<string>(searchParams.get('gearbox')?.split(','))
     )
 
     const [fuelType, { toggle: toggleFuelType }] = useSet(
@@ -61,17 +70,30 @@ export const useFilters = (): ReturnProps => {
         setPrices((prev) => ({ ...prev, [name]: value }))
     }
 
+    const [mileage, setMileage] = useState<MileageProps>({
+        mileageFrom: Number(searchParams.get('mileageFrom')) || undefined,
+        mileageTo: Number(searchParams.get('mileageTo')) || undefined,
+    })
+
+    const updateMileage = (name: keyof MileageProps, value: number) => {
+        setMileage((prev) => ({ ...prev, [name]: value }))
+    }
+
     return useMemo(
         () => ({
             selectedBrands,
             selectedModels,
             prices,
+            mileage,
             fuelType,
+            gearbox,
             setBrands: toggleBrands,
             setModels: toggleModels,
             setPrices: updatePrices,
+            setMileage: updateMileage,
+            setGearbox: toggleGearbox,
             setFuelType: toggleFuelType,
         }),
-        [selectedBrands, selectedModels, prices, fuelType]
+        [selectedBrands, selectedModels, prices, mileage, gearbox, fuelType]
     )
 }
