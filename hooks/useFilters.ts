@@ -22,6 +22,7 @@ export interface QueryFilters extends PriceProps, MileageProps {
     fuelType: string
     year: string
     gearbox: string
+    query: string
 }
 
 export interface Filters {
@@ -31,18 +32,20 @@ export interface Filters {
     mileage: MileageProps
     fuelType: Set<string>
     gearbox: Set<string>
+    query: string
 }
 
-interface ReturnProps extends Filters {
+export interface FiltersReturnProps extends Filters {
     setBrands: (value: string) => void
     setModels: (value: string) => void
     setFuelType: (value: FuelType) => void
     setPrices: (name: keyof PriceProps, value: number) => void
     setMileage: (name: keyof MileageProps, value: number) => void
     setGearbox: (value: GearboxType) => void
+    setQuery: (value: string) => void
 }
 
-export const useFilters = (): ReturnProps => {
+export const useFilters = (): FiltersReturnProps => {
     const searchParams = useSearchParams() as unknown as Map<keyof QueryFilters, string>
 
     const [selectedBrands, { toggle: toggleBrands }] = useSet(
@@ -79,6 +82,8 @@ export const useFilters = (): ReturnProps => {
         setMileage((prev) => ({ ...prev, [name]: value }))
     }
 
+    const [query, setQuery] = useState(searchParams.get('query') || '')
+
     return useMemo(
         () => ({
             selectedBrands,
@@ -87,13 +92,15 @@ export const useFilters = (): ReturnProps => {
             mileage,
             fuelType,
             gearbox,
+            query,
             setBrands: toggleBrands,
             setModels: toggleModels,
             setPrices: updatePrices,
             setMileage: updateMileage,
             setGearbox: toggleGearbox,
             setFuelType: toggleFuelType,
+            setQuery,
         }),
-        [selectedBrands, selectedModels, prices, mileage, gearbox, fuelType]
+        [selectedBrands, selectedModels, prices, mileage, gearbox, fuelType, query]
     )
 }

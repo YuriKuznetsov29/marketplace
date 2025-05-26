@@ -8,7 +8,7 @@ interface CarListingProps {
 
 export const CarListing: React.FC<CarListingProps> = ({ listing }) => {
     return (
-        <Card className="min-w-[300px]">
+        <Card className="">
             <CardHeader>
                 <CardTitle>{listing.title}</CardTitle>
                 <CardDescription>{listing.description}</CardDescription>

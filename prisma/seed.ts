@@ -2,6 +2,11 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
+    await prisma.listing.deleteMany()
+    await prisma.user.deleteMany()
+    await prisma.model.deleteMany()
+    await prisma.brand.deleteMany()
+
     const carBrands: Record<string, string[]> = {
         Toyota: ['Camry', 'Corolla', 'RAV4', 'Land Cruiser'],
         BMW: ['3 Series', '5 Series', 'X5', 'X3'],
@@ -74,7 +79,9 @@ async function main() {
                 fuelType: random(fuelTypes),
                 gearbox: random(gearboxTypes),
                 location: random(cities),
-                images: ['https://example.com/car.jpg'],
+                images: [
+                    `https://loremflickr.com/800/600/car,${brandName},${modelName}?random=${i}`
+                ],
                 sellerId: user.id,
                 brandId: brands[brandName].id,
                 modelId: models[brandName][modelName].id,

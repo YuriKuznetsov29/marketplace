@@ -1,22 +1,15 @@
 import React from 'react'
 import qs from 'qs'
 import { useRouter } from 'next/navigation'
-import { Filters } from './useFilters'
 
-export const useQueryFilters = (filters: Filters) => {
+export const useQuerySearch = (searchQuery: string) => {
     const isMounted = React.useRef(false)
     const router = useRouter()
 
     React.useEffect(() => {
         if (isMounted.current) {
             const params = {
-                ...filters.prices,
-                ...filters.mileage,
-                brands: Array.from(filters.selectedBrands),
-                models: Array.from(filters.selectedModels),
-                fuelType: Array.from(filters.fuelType),
-                gearbox: Array.from(filters.gearbox),
-                query: filters.query,
+                query: searchQuery,
             }
 
             const query = qs.stringify(params, {
@@ -29,5 +22,5 @@ export const useQueryFilters = (filters: Filters) => {
         }
 
         isMounted.current = true
-    }, [filters])
+    }, [searchQuery])
 }

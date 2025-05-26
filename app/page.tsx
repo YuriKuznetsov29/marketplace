@@ -1,6 +1,7 @@
 import { CarListing } from '@/components/shared/car-listing'
 import { Container } from '@/components/shared/container'
 import { Filters } from '@/components/shared/filters'
+import { Search } from '@/components/shared/search'
 import { findCars, GetSearchParams } from '@/lib/find-cars'
 
 export default async function Home({ searchParams }: { searchParams: Promise<GetSearchParams> }) {
@@ -10,7 +11,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Get
         <>
             <main className="w-full">
                 <Container>
-                    <div className="w-full flex items-start gap-4">
+                    <div className="w-full grid grid-cols-[300px_1fr] gap-4">
                         <Filters />
                         <div className="w-full grid grid-cols-3 gap-4">
                             {listings.length > 0 &&
