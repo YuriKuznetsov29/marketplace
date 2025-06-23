@@ -22,6 +22,8 @@ model User {
     favorites        Favorite[]
     createdAt        DateTime   @default(now())
     reports          Report[]   @relation("UserReports")
+    provider         String?
+    providerId       String?
 }
 
 enum Role {

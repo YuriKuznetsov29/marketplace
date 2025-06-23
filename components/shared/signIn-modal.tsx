@@ -8,6 +8,7 @@ import { Input } from '../ui/input'
 import { useForm } from 'react-hook-form'
 import { Button } from '../ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useSession, signOut, signIn } from 'next-auth/react'
 
 const formSchema = z.object({
     email: z.string().email(),
@@ -41,6 +42,7 @@ export const SignInModal: React.FC<Props> = ({ open, setOpen }: Props) => {
                     <Input placeholder="Email" />
                     <Input placeholder="Password" />
                     <Button type="submit">Submit</Button>
+                    <Button onClick={() => signIn('github')}>GitHub</Button>
                 </Form>
             </DialogContent>
         </Dialog>

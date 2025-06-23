@@ -27,11 +27,11 @@ export const Header: React.FC<Props> = () => {
         <header className={'border-b mb-4'}>
             <Container className="flex items-center justify-end py-4">
                 {status}
-                <Button onClick={() => signIn()}>
+                <Button onClick={() => setOpenAuthModal(true)}>
                     <User size={16} />
                     Войти
                 </Button>
-                {/* <SignInModal open={openAuthModal} setOpen={setOpenAuthModal} /> */}
+                <SignInModal open={openAuthModal} setOpen={setOpenAuthModal} />
             </Container>
         </header>
     )

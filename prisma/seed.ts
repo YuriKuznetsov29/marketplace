@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client'
+import { hashSync } from 'bcrypt'
+
 const prisma = new PrismaClient()
 
 async function main() {
@@ -42,11 +44,11 @@ async function main() {
 
     const users = await prisma.user.createMany({
         data: [
-            { name: 'Alice', email: 'alice@example.com', password: 'hashedpass1' },
-            { name: 'Bob', email: 'bob@example.com', password: 'hashedpass2' },
-            { name: 'Charlie', email: 'charlie@example.com', password: 'hashedpass3' },
-            { name: 'Diana', email: 'diana@example.com', password: 'hashedpass4' },
-            { name: 'Ethan', email: 'ethan@example.com', password: 'hashedpass5' },
+            { name: 'Alice', email: 'alice@example.com', password: hashSync('111111', 10) },
+            { name: 'Bob', email: 'bob@example.com', password: hashSync('111111', 10) },
+            { name: 'Charlie', email: 'charlie@example.com', password: hashSync('111111', 10) },
+            { name: 'Diana', email: 'diana@example.com', password: hashSync('111111', 10) },
+            { name: 'Ethan', email: 'ethan@example.com', password: hashSync('111111', 10) },
         ],
     })
 
@@ -80,7 +82,7 @@ async function main() {
                 gearbox: random(gearboxTypes),
                 location: random(cities),
                 images: [
-                    `https://loremflickr.com/800/600/car,${brandName},${modelName}?random=${i}`
+                    `https://loremflickr.com/800/600/car,${brandName},${modelName}?random=${i}`,
                 ],
                 sellerId: user.id,
                 brandId: brands[brandName].id,
