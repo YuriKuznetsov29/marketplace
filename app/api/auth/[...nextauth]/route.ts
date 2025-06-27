@@ -1,6 +1,6 @@
 import { prisma } from '@/prisma/prisma-client'
 import { PrismaClient } from '@prisma/client'
-import { compare } from 'bcrypt'
+import { compare, hashSync } from 'bcrypt'
 import NextAuth from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
 import CredentialProvider from 'next-auth/providers/credentials'
@@ -10,6 +10,14 @@ export const authOptions = {
         GithubProvider({
             clientId: process.env.GITHUB_ID || '',
             clientSecret: process.env.GITHUB_SECRET || '',
+            profile(profile) {
+                return {
+                    id: profile.id,
+                    name: profile.name,
+                    email: profile.email,
+                    image: profile.avatar_url,
+                }
+            },
         }),
         CredentialProvider({
             name: 'Credentials',
@@ -46,6 +54,52 @@ export const authOptions = {
         strategy: 'jwt',
     },
     callbacks: {
+        signIn: async ({ user, account }) => {
+            try {
+                if (account?.provider === 'credentials') {
+                    return true
+                }
+
+                if (!user.email) {
+                    return false
+                }
+
+                const findUser = await prisma.user.findFirst({
+                    where: {
+                        OR: [
+                            { provider: account?.provider, providerId: account?.providerAccountId },
+                            { email: user.email },
+                        ],
+                    },
+                })
+
+                if (findUser) {
+                    await prisma.user.update({
+                        where: {
+                            id: findUser.id,
+                        },
+                        data: {
+                            provider: account?.provider,
+                            providerId: account?.providerAccountId,
+                        },
+                    })
+
+                    return true
+                }
+
+                await prisma.user.create({
+                    data: {
+                        email: user.email,
+                        password: hashSync(user.id.toString(), 10),
+                        name: user.name,
+                        provider: account?.provider,
+                        providerId: account?.providerAccountId,
+                    },
+                })
+            } catch (error) {
+                return false
+            }
+        },
         jwt: async ({ token }) => {
             const findUser = await prisma.user.findFirst({
                 where: {
@@ -70,9 +124,6 @@ export const authOptions = {
 
             return session
         },
-        // signIn: ({ user, account }) => {
-        //     return true
-        // },
     },
     secret: process.env.NEXTAUTH_SECRET,
 }

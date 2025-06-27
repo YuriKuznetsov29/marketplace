@@ -71,7 +71,7 @@ export const SignInModal: React.FC<Props> = ({ open, setOpen }: Props) => {
                         <Button type="submit">Submit</Button>
                     </form>
                 </FormProvider>
-                {/* <Button onClick={() => signIn('github')}>GitHub</Button> */}
+                <Button onClick={() => signIn('github')}>GitHub</Button>
             </DialogContent>
         </Dialog>
     )
