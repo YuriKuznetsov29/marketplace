@@ -1,11 +1,10 @@
 'use client'
 
 import { z } from 'zod'
-import { DialogContent } from '@radix-ui/react-dialog'
-import { Dialog } from '../ui/dialog'
-import { Form } from '../ui/form'
+import { Dialog, DialogContent } from '../ui/dialog'
+import { Form, FormControl, FormField, FormItem } from '../ui/form'
 import { Input } from '../ui/input'
-import { useForm } from 'react-hook-form'
+import { useForm, FormProvider } from 'react-hook-form'
 import { Button } from '../ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSession, signOut, signIn } from 'next-auth/react'
@@ -29,21 +28,50 @@ export const SignInModal: React.FC<Props> = ({ open, setOpen }: Props) => {
         },
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        try {
+            const resp = await signIn('credentials', { ...values })
+            if (!resp?.ok) {
+                throw Error()
+            }
+
+            setOpen(false)
+        } catch (error) {
+            console.log(error, 'login error')
+        }
     }
 
     return (
         <Dialog open={open}>
             <DialogContent>
-                <Form {...form}>
-                    <Input placeholder="Email" />
-                    <Input placeholder="Password" />
-                    <Button type="submit">Submit</Button>
-                    <Button onClick={() => signIn('github')}>GitHub</Button>
-                </Form>
+                <FormProvider {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)}>
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <Input placeholder="Email" {...field} />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="password"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <Input placeholder="Password" {...field} />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                        <Button type="submit">Submit</Button>
+                    </form>
+                </FormProvider>
+                {/* <Button onClick={() => signIn('github')}>GitHub</Button> */}
             </DialogContent>
         </Dialog>
     )
