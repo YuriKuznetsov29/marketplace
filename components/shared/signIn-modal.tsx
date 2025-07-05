@@ -8,6 +8,9 @@ import { useForm, FormProvider } from 'react-hook-form'
 import { Button } from '../ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSession, signOut, signIn } from 'next-auth/react'
+import { RegisterForm } from './regirster-form'
+import { useState } from 'react'
+import { SignInForm } from './signIn-form'
 
 const formSchema = z.object({
     email: z.string().email(),
@@ -20,58 +23,24 @@ interface Props {
 }
 
 export const SignInModal: React.FC<Props> = ({ open, setOpen }: Props) => {
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            email: '',
-            password: '',
-        },
-    })
-
-    async function onSubmit(values: z.infer<typeof formSchema>) {
-        try {
-            const resp = await signIn('credentials', { ...values })
-            if (!resp?.ok) {
-                throw Error()
-            }
-
-            setOpen(false)
-        } catch (error) {
-            console.log(error, 'login error')
-        }
-    }
+    const [form, setForm] = useState<'signIn' | 'register'>('signIn')
 
     return (
         <Dialog open={open}>
             <DialogContent>
-                <FormProvider {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)}>
-                        <FormField
-                            control={form.control}
-                            name="email"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormControl>
-                                        <Input placeholder="Email" {...field} />
-                                    </FormControl>
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="password"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormControl>
-                                        <Input placeholder="Password" {...field} />
-                                    </FormControl>
-                                </FormItem>
-                            )}
-                        />
-                        <Button type="submit">Submit</Button>
-                    </form>
-                </FormProvider>
+                {form === 'register' ? (
+                    <>
+                        <RegisterForm />
+                        <Button onClick={() => setForm('signIn')}>Войти</Button>
+                    </>
+                ) : (
+                    <>
+                        <SignInForm setOpen={setOpen} />
+                        <Button onClick={() => setForm('register')}>Зарегистрироваться</Button>
+                    </>
+                )}
                 <Button onClick={() => signIn('github')}>GitHub</Button>
+                <Button onClick={() => signOut()}>Выйти</Button>
             </DialogContent>
         </Dialog>
     )

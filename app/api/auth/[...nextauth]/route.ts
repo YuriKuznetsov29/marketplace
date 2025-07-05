@@ -1,10 +1,10 @@
 import { prisma } from '@/prisma/prisma-client'
 import { PrismaClient } from '@prisma/client'
 import { compare, hashSync } from 'bcrypt'
-import NextAuth from 'next-auth'
+import NextAuth, { AuthOptions } from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
 import CredentialProvider from 'next-auth/providers/credentials'
-export const authOptions = {
+export const authOptions: AuthOptions = {
     // Configure one or more authentication providers
     providers: [
         GithubProvider({
@@ -60,15 +60,15 @@ export const authOptions = {
                     return true
                 }
 
-                if (!user.email) {
-                    return false
-                }
+                // if (!user.email) {
+                //     return false
+                // }
 
                 const findUser = await prisma.user.findFirst({
                     where: {
                         OR: [
                             { provider: account?.provider, providerId: account?.providerAccountId },
-                            { email: user.email },
+                            { email: user?.email || '' },
                         ],
                     },
                 })
@@ -89,9 +89,9 @@ export const authOptions = {
 
                 await prisma.user.create({
                     data: {
-                        email: user.email,
+                        email: user?.email || '',
                         password: hashSync(user.id.toString(), 10),
-                        name: user.name,
+                        name: user.name || '',
                         provider: account?.provider,
                         providerId: account?.providerAccountId,
                     },
