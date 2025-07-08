@@ -8,24 +8,11 @@ import { FormControl, FormField, FormItem, FormMessage } from '../ui/form'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { registerUser } from '@/app/api/actions'
-
-const formSchema = z
-    .object({
-        email: z.string().email('Invalid email'),
-        name: z.string().nonempty('Name is required'), // Optional: Add a required validation message
-        password: z.string().min(6, 'Password must be at least 6 characters long'),
-        confirmPassword: z
-            .string()
-            .min(6, 'Confirmation password must be at least 6 characters long'),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-        message: "Passwords don't match",
-        path: ['confirmPassword'],
-    })
+import { TFormRegisterValues, registrationSchema } from './schemas'
 
 export const RegisterForm: React.FC = () => {
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<TFormRegisterValues>({
+        resolver: zodResolver(registrationSchema),
         defaultValues: {
             email: '',
             name: '',
@@ -34,7 +21,7 @@ export const RegisterForm: React.FC = () => {
         },
     })
 
-    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const onSubmit = async (values: TFormRegisterValues) => {
         try {
             const { email, name, password } = values
             await registerUser({ email, name, password })

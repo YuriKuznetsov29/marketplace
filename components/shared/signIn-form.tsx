@@ -6,26 +6,22 @@ import { Button } from '../ui/button'
 import { signIn } from 'next-auth/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-
-const formSchema = z.object({
-    email: z.string().email(),
-    password: z.string().min(6),
-})
+import { TFormLoginValues, loginSchema } from './schemas'
 
 interface Props {
     setOpen: (open: boolean) => void
 }
 
 export const SignInForm: React.FC<Props> = ({ setOpen }: Props) => {
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<TFormLoginValues>({
+        resolver: zodResolver(loginSchema),
         defaultValues: {
             email: '',
             password: '',
         },
     })
 
-    async function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: TFormLoginValues) {
         try {
             const resp = await signIn('credentials', { ...values })
             if (!resp?.ok) {

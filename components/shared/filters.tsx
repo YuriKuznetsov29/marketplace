@@ -29,8 +29,6 @@ export const Filters: React.FC = ({ className }: Props) => {
 
     useQueryFilters(filters)
 
-    console.log(filters.selectedBrands)
-
     return (
         <>
             <Search filters={filters} />
