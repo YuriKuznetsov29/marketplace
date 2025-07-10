@@ -40,7 +40,6 @@ export const SignInModal: React.FC<Props> = ({ open, setOpen }: Props) => {
                     </>
                 )}
                 <Button onClick={() => signIn('github')}>GitHub</Button>
-                <Button onClick={() => signOut()}>Выйти</Button>
             </DialogContent>
         </Dialog>
     )

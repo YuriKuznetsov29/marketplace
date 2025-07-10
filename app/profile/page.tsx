@@ -9,11 +9,7 @@ import { findCars, GetSearchParams } from '@/lib/find-cars'
 import { prisma } from '@/prisma/prisma-client'
 import { redirect } from 'next/navigation'
 
-export default async function Profile({
-    searchParams,
-}: {
-    searchParams: Promise<GetSearchParams>
-}) {
+export default async function Profile() {
     const session = await getUserSession()
 
     if (!session) {

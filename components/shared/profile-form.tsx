@@ -66,7 +66,7 @@ export const ProfileForm: React.FC<Props> = ({ user }) => {
 
                 <Button
                     disabled={form.formState.isSubmitting}
-                    className="text-base mt-10"
+                    className="text-base mt-10 mr-4"
                     type="submit"
                 >
                     Сохранить

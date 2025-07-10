@@ -7,6 +7,7 @@ import { signIn } from 'next-auth/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { TFormLoginValues, loginSchema } from './schemas'
+import { FormInput } from './form-input'
 
 interface Props {
     setOpen: (open: boolean) => void
@@ -37,29 +38,9 @@ export const SignInForm: React.FC<Props> = ({ setOpen }: Props) => {
     return (
         <FormProvider {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-                <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormControl>
-                                <Input placeholder="Email" {...field} />
-                            </FormControl>
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormControl>
-                                <Input placeholder="Password" {...field} />
-                            </FormControl>
-                        </FormItem>
-                    )}
-                />
-                <Button className="w-full" type="submit">
+                <FormInput name="email" label="E-Mail" required />
+                <FormInput name="password" label="Пароль" required />
+                <Button className="w-full mt-4" type="submit">
                     Войти
                 </Button>
             </form>

@@ -9,6 +9,7 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { registerUser } from '@/app/api/actions'
 import { TFormRegisterValues, registrationSchema } from './schemas'
+import { FormInput } from './form-input'
 
 export const RegisterForm: React.FC = () => {
     const form = useForm<TFormRegisterValues>({
@@ -31,60 +32,16 @@ export const RegisterForm: React.FC = () => {
     }
 
     return (
-        <>
-            <FormProvider {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)}>
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormControl>
-                                    <Input placeholder="Email" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormControl>
-                                    <Input placeholder="Name" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="password"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormControl>
-                                    <Input placeholder="Password" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="confirmPassword"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormControl>
-                                    <Input placeholder="confirmPassword" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <Button type="submit">Зарегистрироваться</Button>
-                </form>
-            </FormProvider>
-        </>
+        <FormProvider {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+                <FormInput name="email" label="E-Mail" required />
+                <FormInput name="name" label="Имя" required />
+                <FormInput name="password" label="Пароль" required />
+                <FormInput name="confirmPassword" label="Подтвердите пароль" required />
+                <Button className="w-full mt-4" type="submit">
+                    Зарегистрироваться
+                </Button>
+            </form>
+        </FormProvider>
     )
 }

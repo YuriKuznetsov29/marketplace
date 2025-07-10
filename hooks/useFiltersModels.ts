@@ -7,19 +7,26 @@ type ReturnProps = {
     models: Model[]
 }
 
-export const useFiltersModels = (): ReturnProps => {
+interface Props {
+    brand: string
+}
+
+export const useFiltersModels = ({ brand }: Props): ReturnProps => {
     const [models, setModels] = useState<Model[]>([])
 
     const searchParams = useSearchParams()
 
     const brands = searchParams.get('brands')?.split(',')
 
-    console.log(brands, 'ids')
-
     useEffect(() => {
+        if (brand) {
+            Api.filters.getModels([brand]).then(setModels)
+            return
+        }
+
         if (!brands?.length) return
         Api.filters.getModels(brands).then(setModels)
-    }, [brands?.length])
+    }, [brands?.length, brand])
 
     return { models }
 }
