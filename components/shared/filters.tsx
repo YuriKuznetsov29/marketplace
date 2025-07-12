@@ -24,7 +24,7 @@ export const Filters: React.FC = ({ className }: Props) => {
     const [openModel, setOpenModel] = useState(false)
 
     const { brands } = useFiltersBrands()
-    const { models } = useFiltersModels()
+    const { models } = useFiltersModels({})
     const filters = useFilters()
 
     useQueryFilters(filters)

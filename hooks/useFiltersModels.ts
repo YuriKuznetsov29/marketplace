@@ -8,7 +8,7 @@ type ReturnProps = {
 }
 
 interface Props {
-    brand: string
+    brand?: string
 }
 
 export const useFiltersModels = ({ brand }: Props): ReturnProps => {

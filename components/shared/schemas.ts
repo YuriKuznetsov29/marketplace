@@ -28,7 +28,7 @@ export const listingSchema = z.object({
     fuelType: z.string().nonempty('Выберите тип топлива'),
     gearbox: z.string().nonempty('Выберите коробку передач'),
     description: z.string().nonempty('Введите описание'),
-    image: z.string().nonempty('Загрузите фото'),
+    images: z.any(),
 })
 
 export type TFormLoginValues = z.infer<typeof loginSchema>
