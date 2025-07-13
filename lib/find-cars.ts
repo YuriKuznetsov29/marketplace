@@ -13,7 +13,7 @@ export interface GetSearchParams {
 }
 
 const DEFAULT_MIN_PRICE = 0
-const DEFAULT_MAX_PRICE = 1000000
+const DEFAULT_MAX_PRICE = 1000000000
 
 export const findCars = async (params: Promise<GetSearchParams>) => {
     const { brands, models, priceFrom, priceTo, fuelType, gearbox, query } = await params

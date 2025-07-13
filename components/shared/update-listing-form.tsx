@@ -12,12 +12,22 @@ import { useFiltersModels } from '@/hooks/useFiltersModels'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import { FormTextarea } from './form-textarea'
 import { FormField } from '@/components/ui/form'
-import { createListing } from '@/app/api/actions'
+import { updateListing } from '@/app/api/actions'
+import { Brand, Listing, Model } from '@prisma/client'
 
-export const ListingForm = () => {
+interface Props {
+    listing: Listing & {
+        brand: Brand
+        model: Model
+    }
+}
+
+export const UpdateListingForm: React.FC = () => {
     const form = useForm<TFormListingValues>({
         resolver: zodResolver(listingSchema),
         defaultValues: {
+            // brand: listing.brand.name,
+            // model: listing.model.name,
             brand: '',
             model: '',
             fuelType: undefined,
@@ -30,18 +40,16 @@ export const ListingForm = () => {
         },
     })
 
-    const [brand, setBrand] = useState('')
+    const [brand, setBrand] = useState(null)
     const formRef = useRef<HTMLFormElement>(null)
 
-    const { brands } = useFiltersBrands()
-    const { models } = useFiltersModels({ brand })
+    // const { brands } = useFiltersBrands()
+    // const { models } = useFiltersModels({ brand })
 
     const onSubmit = async (data: TFormListingValues) => {
         if (formRef.current instanceof HTMLFormElement) {
-            const body = new FormData(formRef.current)
-            console.log(data, models, body, 'data')
             try {
-                await createListing(data)
+                // await updateListing(data)
 
                 toast.error('Объявление создано 📝', {
                     icon: '✅',
@@ -54,8 +62,8 @@ export const ListingForm = () => {
         }
     }
 
-    const date = new Date()
-    const year = date.getFullYear()
+    // const date = new Date()
+    // const year = date.getFullYear()
 
     return (
         <FormProvider {...form}>
@@ -81,7 +89,7 @@ export const ListingForm = () => {
                         </Select>
                     )}
                 />
-                {models.length > 0 && (
+                {models && models?.length > 0 && (
                     <FormField
                         name="model"
                         render={({ field }) => (
@@ -145,7 +153,7 @@ export const ListingForm = () => {
                     name="year"
                     label="Год выпуска"
                     min={1930}
-                    max={year}
+                    max={2025}
                     type="number"
                     required
                 />

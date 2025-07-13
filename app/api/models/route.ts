@@ -9,14 +9,21 @@ export async function GET(req: NextRequest, { params }: { params: { brands: stri
     const models = await prisma.model.findMany({
         where: {
             brand: {
-                name: {
-                    in: brands,
-                },
+                OR: [
+                    {
+                        name: {
+                            in: brands,
+                        },
+                    },
+                    {
+                        id: {
+                            in: brands,
+                        },
+                    },
+                ],
             },
         },
     })
-
-    console.log(models, 'params')
 
     return NextResponse.json(models)
 }

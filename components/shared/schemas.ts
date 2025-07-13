@@ -19,16 +19,32 @@ export const registrationSchema = loginSchema
         path: ['confirmPassword'],
     })
 
+const date = new Date()
+const year = date.getFullYear()
+
 export const listingSchema = z.object({
     brand: z.string().nonempty('Выберите марку'),
     model: z.string().nonempty('Выберите модель'),
-    year: z.string().nonempty('Выберите год'),
-    price: z.string().nonempty('Выберите цену'),
-    mileage: z.string().nonempty('Выберите пробег'),
-    fuelType: z.string().nonempty('Выберите тип топлива'),
-    gearbox: z.string().nonempty('Выберите коробку передач'),
+    year: z.coerce.number().min(1900, 'Укажите корректный год').max(year, 'Укажите корректный год'),
+    price: z.coerce.number().min(0, 'Введите цену'),
+    mileage: z.coerce.number().min(0, 'Введите пробег'),
+    fuelType: z
+        .union([
+            z.literal('GASOLINE'),
+            z.literal('DIESEL'),
+            z.literal('ELECTRIC'),
+            z.literal('HYBRID'),
+        ])
+        .refine((value) => value.length > 0, {
+            message: 'Выберете тип двигателя',
+        }),
+    gearbox: z
+        .union([z.literal('MANUAL'), z.literal('AUTOMATIC')])
+        .refine((value) => value.length > 0, {
+            message: 'Выберите коробку передач',
+        }),
     description: z.string().nonempty('Введите описание'),
-    images: z.any(),
+    images: z.custom<FileList>(),
 })
 
 export type TFormLoginValues = z.infer<typeof loginSchema>

@@ -8,6 +8,8 @@ import { findCars, GetSearchParams } from '@/lib/find-cars'
 export default async function Home({ searchParams }: { searchParams: Promise<GetSearchParams> }) {
     const listings = await findCars(searchParams)
 
+    console.log(listings)
+
     return (
         <>
             <Header />
