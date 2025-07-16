@@ -22,34 +22,36 @@ interface Props {
     }
 }
 
-export const UpdateListingForm: React.FC = () => {
+export const UpdateListingForm: React.FC<Props> = ({ listing }) => {
     const form = useForm<TFormListingValues>({
         resolver: zodResolver(listingSchema),
         defaultValues: {
-            // brand: listing.brand.name,
-            // model: listing.model.name,
-            brand: '',
-            model: '',
-            fuelType: undefined,
-            year: undefined,
-            gearbox: undefined,
-            price: undefined,
-            mileage: undefined,
+            brand: listing.brand.name,
+            model: listing.model.name,
+            fuelType: listing.fuelType,
+            year: listing.year,
+            gearbox: listing.gearbox,
+            price: listing.price,
+            mileage: listing.mileage,
             images: undefined,
-            description: '',
+            description: listing.description,
         },
     })
 
-    const [brand, setBrand] = useState(null)
+    const [brand, setBrand] = useState(listing.brand.name)
     const formRef = useRef<HTMLFormElement>(null)
 
-    // const { brands } = useFiltersBrands()
-    // const { models } = useFiltersModels({ brand })
+    console.log(brand)
+
+    const { brands } = useFiltersBrands()
+    const { models } = useFiltersModels({ brand })
 
     const onSubmit = async (data: TFormListingValues) => {
         if (formRef.current instanceof HTMLFormElement) {
             try {
-                // await updateListing(data)
+                console.log(data)
+
+                await updateListing({ ...data, id: listing.id })
 
                 toast.error('Объявление создано 📝', {
                     icon: '✅',
@@ -76,20 +78,22 @@ export const UpdateListingForm: React.FC = () => {
                                 setBrand(value)
                                 field.onChange(value)
                             }}
-                            defaultValue={field.value}
+                            value={field.value}
                         >
                             <SelectTrigger className="w-[180px]">
                                 <SelectValue placeholder="Выберете бренд" />
                             </SelectTrigger>
                             <SelectContent>
                                 {brands.map((brand) => (
-                                    <SelectItem value={brand.id}>{brand.name}</SelectItem>
+                                    <SelectItem key={brand.id} value={brand.id}>
+                                        {brand.name}
+                                    </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
                     )}
                 />
-                {models && models?.length > 0 && (
+                {models?.length > 0 && (
                     <FormField
                         name="model"
                         render={({ field }) => (
@@ -102,7 +106,9 @@ export const UpdateListingForm: React.FC = () => {
                                 </SelectTrigger>
                                 <SelectContent>
                                     {models.map((model) => (
-                                        <SelectItem value={model.id}>{model.name}</SelectItem>
+                                        <SelectItem key={model.id} value={model.id}>
+                                            {model.name}
+                                        </SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>

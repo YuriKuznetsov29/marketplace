@@ -1,14 +1,17 @@
 import { getUserSession } from '@/components/shared/constants/get-user-session'
+import { Container } from '@/components/shared/container'
 import { UpdateListingForm } from '@/components/shared/update-listing-form'
 import { prisma } from '@/prisma/prisma-client'
-import { Container } from 'lucide-react'
 import { redirect } from 'next/navigation'
 
 interface Params {
-    id: string
+    params: {
+        id: string
+    }
 }
-export default async function UpdateListingPage(params: Promise<Params>) {
-    const { id } = await params
+export default async function UpdateListingPage({ params }: { params: { id: string } }) {
+    const { id } = params
+
     const session = await getUserSession()
 
     if (!session) {
@@ -29,7 +32,7 @@ export default async function UpdateListingPage(params: Promise<Params>) {
 
     return (
         <Container>
-            <UpdateListingForm />
+            <UpdateListingForm listing={listing} />{' '}
         </Container>
     )
 }
