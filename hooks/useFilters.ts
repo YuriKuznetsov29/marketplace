@@ -14,7 +14,12 @@ export interface MileageProps {
     mileageTo?: number
 }
 
-export interface QueryFilters extends PriceProps, MileageProps {
+export interface YearProps {
+    yearFrom?: number
+    yearTo?: number
+}
+
+export interface QueryFilters extends PriceProps, MileageProps, YearProps {
     brands: string
     models: string
     prices: string
@@ -30,6 +35,7 @@ export interface Filters {
     selectedModels: Set<string>
     prices: PriceProps
     mileage: MileageProps
+    year: YearProps
     fuelType: Set<string>
     gearbox: Set<string>
     query: string
@@ -43,6 +49,7 @@ export interface FiltersReturnProps extends Filters {
     setMileage: (name: keyof MileageProps, value: number) => void
     setGearbox: (value: GearboxType) => void
     setQuery: (value: string) => void
+    setYear: (name: keyof YearProps, value: number) => void
 }
 
 export const useFilters = (): FiltersReturnProps => {
@@ -73,6 +80,15 @@ export const useFilters = (): FiltersReturnProps => {
         setPrices((prev) => ({ ...prev, [name]: value }))
     }
 
+    const [year, setYear] = useState<YearProps>({
+        yearFrom: Number(searchParams.get('yearFrom')) || undefined,
+        yearTo: Number(searchParams.get('yearTo')) || undefined,
+    })
+
+    const updateYear = (name: keyof YearProps, value: number) => {
+        setYear((prev) => ({ ...prev, [name]: value }))
+    }
+
     const [mileage, setMileage] = useState<MileageProps>({
         mileageFrom: Number(searchParams.get('mileageFrom')) || undefined,
         mileageTo: Number(searchParams.get('mileageTo')) || undefined,
@@ -92,6 +108,7 @@ export const useFilters = (): FiltersReturnProps => {
             mileage,
             fuelType,
             gearbox,
+            year,
             query,
             setBrands: toggleBrands,
             setModels: toggleModels,
@@ -99,8 +116,9 @@ export const useFilters = (): FiltersReturnProps => {
             setMileage: updateMileage,
             setGearbox: toggleGearbox,
             setFuelType: toggleFuelType,
+            setYear: updateYear,
             setQuery,
         }),
-        [selectedBrands, selectedModels, prices, mileage, gearbox, fuelType, query]
+        [selectedBrands, selectedModels, prices, mileage, gearbox, fuelType, year, query]
     )
 }

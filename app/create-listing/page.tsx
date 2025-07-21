@@ -1,11 +1,11 @@
-import { CarListing } from '@/components/shared/car-listing'
 import { getUserSession } from '@/components/shared/constants/get-user-session'
 import { Container } from '@/components/shared/container'
+import { ListingForm } from '@/components/shared/listing-form'
 import { prisma } from '@/prisma/prisma-client'
 import { redirect } from 'next/navigation'
 import React from 'react'
 
-export default async function UserListings() {
+export default async function CreateListing() {
     const session = await getUserSession()
 
     if (!session) {
@@ -18,14 +18,9 @@ export default async function UserListings() {
         return redirect('/not-auth')
     }
 
-    const listings = await prisma.listing.findMany({ where: { seller: { id: user.id } } })
-
     return (
         <Container>
-            <div className="w-full grid grid-cols-3 gap-4">
-                {listings.length > 0 &&
-                    listings.map((listing) => <CarListing key={listing.id} listing={listing} />)}
-            </div>
+            <ListingForm />
         </Container>
     )
 }

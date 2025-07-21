@@ -131,8 +131,18 @@ export const Filters: React.FC = ({ className }: Props) => {
                 <div className="flex flex-col gap-2">
                     <Label htmlFor={'price'}>Год выпуска</Label>
                     <div className="flex gap-2">
-                        <Input placeholder="от" />
-                        <Input placeholder="до" />
+                        <Input
+                            placeholder="от"
+                            type="number"
+                            value={String(filters.year.yearFrom)}
+                            onChange={(e) => filters.setYear('yearFrom', Number(e.target.value))}
+                        />
+                        <Input
+                            placeholder="до"
+                            type="number"
+                            value={String(filters.year.yearTo)}
+                            onChange={(e) => filters.setYear('yearTo', Number(e.target.value))}
+                        />
                     </div>
                 </div>
                 <div className="flex flex-col gap-2">

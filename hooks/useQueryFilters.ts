@@ -12,6 +12,7 @@ export const useQueryFilters = (filters: Filters) => {
             const params = {
                 ...filters.prices,
                 ...filters.mileage,
+                ...filters.year,
                 brands: Array.from(filters.selectedBrands),
                 models: Array.from(filters.selectedModels),
                 fuelType: Array.from(filters.fuelType),
