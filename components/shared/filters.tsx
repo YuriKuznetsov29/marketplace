@@ -6,7 +6,6 @@ import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover
 import { Checkbox } from '@/components/ui/checkbox'
 import { Button } from '@/components/ui/button'
 import { useFilters } from '@/hooks/useFilters'
-import { Brand } from '@prisma/client'
 import { useFiltersBrands } from '@/hooks/useFiltersBrands'
 import { useFiltersModels } from '@/hooks/useFiltersModels'
 import { useQueryFilters } from '@/hooks/useQueryFilters'
