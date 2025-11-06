@@ -1,4 +1,3 @@
-import { PriceProps } from '@/hooks/useFilters'
 import { prisma } from '@/prisma/prisma-client'
 import { FuelType, GearboxType } from '@prisma/client'
 
@@ -14,6 +13,8 @@ export interface GetSearchParams {
     fuelType?: string
     gearbox?: string
     query?: string
+    cursor?: string | null
+    limit?: number
 }
 
 const DEFAULT_MIN_PRICE = 0
@@ -23,7 +24,11 @@ const DEFAULT_MAX_MILEAGE = 10000000
 const DEFAULT_MIN_YEAR = 1900
 const DEFAULT_MAX_YEAR = new Date().getFullYear()
 
-export const findCars = async (params: Promise<GetSearchParams>) => {
+export const findCars = async (
+    params: Promise<GetSearchParams> | GetSearchParams
+    // cursor?: string | null,
+    // limit: number = 12
+) => {
     const {
         brands,
         models,
@@ -36,6 +41,8 @@ export const findCars = async (params: Promise<GetSearchParams>) => {
         fuelType,
         gearbox,
         query,
+        cursor,
+        limit,
     } = await params
 
     const minPrice = Number(priceFrom) || DEFAULT_MIN_PRICE
@@ -48,6 +55,9 @@ export const findCars = async (params: Promise<GetSearchParams>) => {
     const maxYear = Number(yearTo) || DEFAULT_MAX_YEAR
 
     const listing = await prisma.listing.findMany({
+        take: limit ?? 12,
+        skip: cursor ? 1 : 0,
+        cursor: cursor ? { id: cursor } : undefined,
         where: {
             brand: {
                 name: {
@@ -107,6 +117,9 @@ export const findCars = async (params: Promise<GetSearchParams>) => {
                     },
                 },
             ],
+        },
+        orderBy: {
+            createdAt: 'desc',
         },
     })
 

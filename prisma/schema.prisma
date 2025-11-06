@@ -1,117 +1,115 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
-
-// models.prisma
 
 model User {
-    id               String     @id @default(uuid())
-    name             String
-    email            String     @unique
-    password         String
-    phone            String?
-    role             Role       @default(USER)
-    listings         Listing[]
-    sentMessages     Message[]  @relation(name: "SentMessages")
-    receivedMessages Message[]  @relation(name: "ReceivedMessages")
-    favorites        Favorite[]
-    createdAt        DateTime   @default(now())
-    reports          Report[]   @relation("UserReports")
-    provider         String?
-    providerId       String?
-}
-
-enum Role {
-    USER
-    ADMIN
+  id               String     @id @default(uuid())
+  name             String
+  email            String     @unique
+  password         String
+  phone            String?
+  role             Role       @default(USER)
+  createdAt        DateTime   @default(now())
+  provider         String?
+  providerId       String?
+  favorites        Favorite[]
+  listings         Listing[]
+  receivedMessages Message[]  @relation("ReceivedMessages")
+  sentMessages     Message[]  @relation("SentMessages")
+  reports          Report[]   @relation("UserReports")
 }
 
 model Listing {
-    id          String      @id @default(uuid())
-    title       String
-    description String
-    price       Int
-    mileage     Int
-    year        Int
-    fuelType    FuelType
-    gearbox     GearboxType
-    location    String
-    images      String[]
-    seller      User        @relation(fields: [sellerId], references: [id])
-    sellerId    String
-    brand       Brand       @relation(fields: [brandId], references: [id])
-    brandId     String
-    model       Model       @relation(fields: [modelId], references: [id])
-    modelId     String
-    createdAt   DateTime    @default(now())
-    favorites   Favorite[]
-    reports     Report[]
-}
-
-enum FuelType {
-    GASOLINE
-    DIESEL
-    ELECTRIC
-    HYBRID
-}
-
-enum GearboxType {
-    MANUAL
-    AUTOMATIC
+  id          String      @id @default(uuid())
+  title       String
+  description String
+  price       Int
+  mileage     Int
+  fuelType    FuelType
+  gearbox     GearboxType
+  location    String
+  images      String[]
+  sellerId    String
+  brandId     String
+  modelId     String
+  createdAt   DateTime    @default(now())
+  year        Int
+  favorites   Favorite[]
+  brand       Brand       @relation(fields: [brandId], references: [id])
+  model       Model       @relation(fields: [modelId], references: [id])
+  seller      User        @relation(fields: [sellerId], references: [id])
+  reports     Report[]
 }
 
 model Message {
-    id         String   @id @default(uuid())
-    sender     User     @relation(name: "SentMessages", fields: [senderId], references: [id])
-    senderId   String
-    receiver   User     @relation(name: "ReceivedMessages", fields: [receiverId], references: [id])
-    receiverId String
-    content    String
-    createdAt  DateTime @default(now())
+  id         String   @id @default(uuid())
+  senderId   String
+  receiverId String
+  content    String
+  createdAt  DateTime @default(now())
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
 }
 
 model Favorite {
-    id        String   @id @default(uuid())
-    user      User     @relation(fields: [userId], references: [id])
-    userId    String
-    listing   Listing  @relation(fields: [listingId], references: [id])
-    listingId String
-    createdAt DateTime @default(now())
+  id        String   @id @default(uuid())
+  userId    String
+  listingId String
+  createdAt DateTime @default(now())
+  listing   Listing  @relation(fields: [listingId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Report {
-    id         String       @id @default(uuid())
-    reporter   User         @relation("UserReports", fields: [reporterId], references: [id])
-    reporterId String
-    listing    Listing?     @relation(fields: [listingId], references: [id])
-    listingId  String?
-    reason     String
-    status     ReportStatus @default(PENDING)
-    createdAt  DateTime     @default(now())
-}
-
-enum ReportStatus {
-    PENDING
-    REVIEWED
-    REJECTED
+  id         String       @id @default(uuid())
+  reporterId String
+  listingId  String?
+  reason     String
+  status     ReportStatus @default(PENDING)
+  createdAt  DateTime     @default(now())
+  listing    Listing?     @relation(fields: [listingId], references: [id])
+  reporter   User         @relation("UserReports", fields: [reporterId], references: [id])
 }
 
 model Brand {
-    id       String    @id @default(uuid())
-    name     String
-    models   Model[]
-    listings Listing[]
+  id       String    @id @default(uuid())
+  name     String
+  listings Listing[]
+  models   Model[]
 }
 
 model Model {
-    id       String    @id @default(uuid())
-    name     String
-    brand    Brand     @relation(fields: [brandId], references: [id])
-    brandId  String
-    listings Listing[]
+  id       String    @id @default(uuid())
+  name     String
+  brandId  String
+  listings Listing[]
+  brand    Brand     @relation(fields: [brandId], references: [id])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum FuelType {
+  GASOLINE
+  DIESEL
+  ELECTRIC
+  HYBRID
+}
+
+enum GearboxType {
+  MANUAL
+  AUTOMATIC
+}
+
+enum ReportStatus {
+  PENDING
+  REVIEWED
+  REJECTED
 }
