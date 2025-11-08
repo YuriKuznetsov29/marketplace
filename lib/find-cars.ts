@@ -13,8 +13,9 @@ export interface GetSearchParams {
     fuelType?: string
     gearbox?: string
     query?: string
+    page: number
     cursor?: string | null
-    limit?: number
+    limit: number
 }
 
 const DEFAULT_MIN_PRICE = 0
@@ -24,11 +25,7 @@ const DEFAULT_MAX_MILEAGE = 10000000
 const DEFAULT_MIN_YEAR = 1900
 const DEFAULT_MAX_YEAR = new Date().getFullYear()
 
-export const findCars = async (
-    params: Promise<GetSearchParams> | GetSearchParams
-    // cursor?: string | null,
-    // limit: number = 12
-) => {
+export const findCars = async (params: Promise<GetSearchParams>) => {
     const {
         brands,
         models,
@@ -41,6 +38,7 @@ export const findCars = async (
         fuelType,
         gearbox,
         query,
+        page,
         cursor,
         limit,
     } = await params
@@ -54,10 +52,78 @@ export const findCars = async (
     const minYear = Number(yearFrom) || DEFAULT_MIN_YEAR
     const maxYear = Number(yearTo) || DEFAULT_MAX_YEAR
 
-    const listing = await prisma.listing.findMany({
-        take: limit ?? 12,
-        skip: cursor ? 1 : 0,
-        cursor: cursor ? { id: cursor } : undefined,
+    const pageNumber = page || 1
+    const limitNumber = limit || 12
+
+    const listings = await prisma.listing.findMany({
+        take: limitNumber,
+        skip: (pageNumber - 1) * limitNumber,
+        // cursor: cursor ? { id: cursor } : undefined,
+        where: {
+            brand: {
+                name: {
+                    in: brands?.split(','),
+                },
+            },
+            model: {
+                name: {
+                    in: models?.split(','),
+                },
+            },
+            fuelType: {
+                in: fuelType?.split(',') as unknown as FuelType[],
+            },
+            gearbox: {
+                in: gearbox?.split(',') as unknown as GearboxType[],
+            },
+            price: {
+                gte: minPrice,
+                lte: maxPrice,
+            },
+            mileage: {
+                gte: minMileage,
+                lte: maxMileage,
+            },
+            year: {
+                gte: minYear,
+                lte: maxYear,
+            },
+            OR: [
+                {
+                    brand: {
+                        name: {
+                            contains: query,
+                            mode: 'insensitive',
+                        },
+                    },
+                },
+                {
+                    model: {
+                        name: {
+                            contains: query,
+                            mode: 'insensitive',
+                        },
+                    },
+                },
+                {
+                    title: {
+                        contains: query,
+                        mode: 'insensitive',
+                    },
+                },
+                {
+                    description: {
+                        contains: query,
+                        mode: 'insensitive',
+                    },
+                },
+            ],
+        },
+        orderBy: {
+            createdAt: 'desc',
+        },
+    })
+    const totalCount = await prisma.listing.count({
         where: {
             brand: {
                 name: {
@@ -123,5 +189,9 @@ export const findCars = async (
         },
     })
 
-    return listing
+    const totalPages = Math.ceil(totalCount / 12)
+
+    console.log(listings, 'params in findCars')
+
+    return { listings, totalPages }
 }

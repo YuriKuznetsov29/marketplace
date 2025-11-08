@@ -28,6 +28,7 @@ export interface QueryFilters extends PriceProps, MileageProps, YearProps {
     year: string
     gearbox: string
     query: string
+    page: number
 }
 
 export interface Filters {
@@ -39,6 +40,7 @@ export interface Filters {
     fuelType: Set<string>
     gearbox: Set<string>
     query: string
+    page: number
 }
 
 export interface FiltersReturnProps extends Filters {
@@ -49,11 +51,19 @@ export interface FiltersReturnProps extends Filters {
     setMileage: (name: keyof MileageProps, value: number) => void
     setGearbox: (value: GearboxType) => void
     setQuery: (value: string) => void
+    setPage: (value: number) => void
     setYear: (name: keyof YearProps, value: number) => void
 }
 
 export const useFilters = (): FiltersReturnProps => {
     const searchParams = useSearchParams() as unknown as Map<keyof QueryFilters, string>
+
+    const [page, setPage] = useState(Number(searchParams.get('page')) || 1)
+
+    const resetPage = <T extends unknown[]>(cb: (...args: T) => void, ...args: T) => {
+        cb(...args)
+        setPage(1)
+    }
 
     const [selectedBrands, { toggle: toggleBrands }] = useSet(
         new Set<string>(searchParams.get('brands')?.split(','))
@@ -110,15 +120,19 @@ export const useFilters = (): FiltersReturnProps => {
             gearbox,
             year,
             query,
-            setBrands: toggleBrands,
-            setModels: toggleModels,
-            setPrices: updatePrices,
-            setMileage: updateMileage,
-            setGearbox: toggleGearbox,
-            setFuelType: toggleFuelType,
-            setYear: updateYear,
-            setQuery,
+            page,
+            setBrands: (...args) => {
+                toggleBrands(...args)
+            },
+            setModels: (...args) => resetPage(toggleModels, ...args),
+            setPrices: (...args) => resetPage(updatePrices, ...args),
+            setMileage: (...args) => resetPage(updateMileage, ...args), // updateMileage,
+            setGearbox: (...args) => resetPage(toggleGearbox, ...args), // toggleGearbox,
+            setFuelType: (...args) => resetPage(toggleFuelType, ...args), // toggleFuelType,
+            setYear: (...args) => resetPage(updateYear, ...args), // updateYear,
+            setPage,
+            setQuery: (...args) => resetPage(setQuery, ...args),
         }),
-        [selectedBrands, selectedModels, prices, mileage, gearbox, fuelType, year, query]
+        [selectedBrands, selectedModels, prices, mileage, gearbox, fuelType, year, query, page]
     )
 }

@@ -1,18 +1,15 @@
-'use client'
-
 import { CarListing } from '@/components/shared/car-listing'
 import { Container } from '@/components/shared/container'
 import { Filters } from '@/components/shared/filters'
 import { Header } from '@/components/shared/header'
 import { ListingsList } from '@/components/shared/listings-list'
 import { Button } from '@/components/ui/button'
-import { GetSearchParams } from '@/lib/find-cars'
+import { findCars, GetSearchParams } from '@/lib/find-cars'
 import { Api } from '@/services/api-client'
 import { Listing } from '@prisma/client'
 import { List } from 'lucide-react'
-import { useEffect, useState } from 'react'
 
-export default function Home({ searchParams }: { searchParams: Promise<GetSearchParams> }) {
+export default async function Home({ searchParams }: { searchParams: Promise<GetSearchParams> }) {
     // const [listings, setListings] = useState<Listing[] | []>([])
     // const [cursor, setCursor] = useState<string | null>(null)
     // const [loading, setLoading] = useState(false)
@@ -35,10 +32,12 @@ export default function Home({ searchParams }: { searchParams: Promise<GetSearch
     //         setLoading(false)
     //     }
     // }
-    // // const listings = await findCars(searchParams)
+    const { listings, totalPages } = await findCars(searchParams)
     // useEffect(() => {
     //     loadMore()
     // }, [])
+
+    console.log(totalPages, 'listings')
 
     return (
         <>
@@ -46,16 +45,16 @@ export default function Home({ searchParams }: { searchParams: Promise<GetSearch
             <main className="w-full">
                 <Container>
                     <div className="w-full grid grid-cols-[300px_1fr] gap-4">
-                        <Filters />
-                        <div className="w-full grid grid-cols-3 gap-4">
+                        <Filters totalPages={totalPages} />
+                        <div className="w-full grid grid-cols-3 gap-4 col-2 row-2">
                             {/* {listings.length > 0 &&
                                 listings.map((listing) => (
                                     <CarListing key={listing.id} listing={listing} />
-                                ))}
-                            <Button disabled={loading} onClick={loadMore}>
+                                ))} */}
+                            {/* <Button disabled={loading} onClick={loadMore}>
                                 {loading ? 'Loading...' : 'Load more'}
                             </Button> */}
-                            <ListingsList searchParams={searchParams} />
+                            <ListingsList listings={listings} />
                         </div>
                     </div>
                 </Container>

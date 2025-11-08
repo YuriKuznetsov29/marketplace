@@ -18,6 +18,7 @@ export const useQueryFilters = (filters: Filters) => {
                 fuelType: Array.from(filters.fuelType),
                 gearbox: Array.from(filters.gearbox),
                 query: filters.query,
+                page: filters.page,
             }
 
             const query = qs.stringify(params, {
