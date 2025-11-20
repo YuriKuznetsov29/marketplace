@@ -1,6 +1,7 @@
 import { Container } from '@/components/shared/container'
 import { Metadata } from 'next'
 import { Sidebar, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { Header } from '@/components/shared/header'
 
 export const metadata: Metadata = {
     title: 'Profile',
@@ -9,12 +10,15 @@ export const metadata: Metadata = {
 
 export default function ProfileLayout({ children }: { children: React.ReactNode }) {
     return (
-        <SidebarProvider>
-            <Sidebar />
-            <main className="">
-                <SidebarTrigger />
-                <Container>{children}</Container>
-            </main>
-        </SidebarProvider>
+        <>
+            <Header />
+            <SidebarProvider>
+                <Sidebar />
+                <main className="w-full">
+                    <SidebarTrigger />
+                    <Container>{children}</Container>
+                </main>
+            </SidebarProvider>
+        </>
     )
 }

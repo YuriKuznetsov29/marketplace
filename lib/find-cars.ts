@@ -39,7 +39,6 @@ export const findCars = async (params: Promise<GetSearchParams>) => {
         gearbox,
         query,
         page,
-        cursor,
         limit,
     } = await params
 
@@ -59,6 +58,11 @@ export const findCars = async (params: Promise<GetSearchParams>) => {
         take: limitNumber,
         skip: (pageNumber - 1) * limitNumber,
         // cursor: cursor ? { id: cursor } : undefined,
+        include: {
+            brand: true,
+            model: true,
+            city: true,
+        },
         where: {
             brand: {
                 name: {

@@ -25,6 +25,7 @@ const year = date.getFullYear()
 export const listingSchema = z.object({
     brand: z.string().nonempty('Выберите марку'),
     model: z.string().nonempty('Выберите модель'),
+    city: z.string().nonempty('Выберите город'),
     year: z.coerce.number().min(1900, 'Укажите корректный год').max(year, 'Укажите корректный год'),
     price: z.coerce.number().min(0, 'Введите цену'),
     mileage: z.coerce.number().min(0, 'Введите пробег'),

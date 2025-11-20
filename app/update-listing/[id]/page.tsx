@@ -1,14 +1,10 @@
 import { getUserSession } from '@/components/shared/constants/get-user-session'
 import { Container } from '@/components/shared/container'
+import { Header } from '@/components/shared/header'
 import { UpdateListingForm } from '@/components/shared/update-listing-form'
 import { prisma } from '@/prisma/prisma-client'
 import { redirect } from 'next/navigation'
 
-interface Params {
-    params: {
-        id: string
-    }
-}
 export default async function UpdateListingPage({ params }: { params: { id: string } }) {
     const { id } = params
 
@@ -31,8 +27,11 @@ export default async function UpdateListingPage({ params }: { params: { id: stri
     }
 
     return (
-        <Container>
-            <UpdateListingForm listing={listing} />{' '}
-        </Container>
+        <>
+            <Header />
+            <Container>
+                <UpdateListingForm listing={listing} />{' '}
+            </Container>
+        </>
     )
 }

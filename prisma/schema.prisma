@@ -32,17 +32,18 @@ model Listing {
   mileage     Int
   fuelType    FuelType
   gearbox     GearboxType
-  location    String
   images      String[]
   sellerId    String
   brandId     String
   modelId     String
+  cityId      Int
   createdAt   DateTime    @default(now())
   year        Int
   favorites   Favorite[]
   brand       Brand       @relation(fields: [brandId], references: [id])
   model       Model       @relation(fields: [modelId], references: [id])
   seller      User        @relation(fields: [sellerId], references: [id])
+  city        City        @relation(fields: [cityId], references: [id])
   reports     Report[]
 }
 
@@ -112,4 +113,33 @@ enum ReportStatus {
   PENDING
   REVIEWED
   REJECTED
+}
+
+model City {
+  id              Int      @id @default(autoincrement())
+  address         String?
+  postalCode      String?
+  country         String?
+  federalDistrict String?
+  regionType      String?
+  region          String?
+  areaType        String?
+  area            String?
+  cityType        String?
+  city            String?
+  settlementType  String?
+  settlement      String?
+  kladrId         String?
+  fiasId          String?
+  fiasLevel       Int?
+  capitalMarker   Int?
+  okato           String?
+  oktmo           String?
+  taxOffice       String?
+  timezone        String?
+  geoLat          Float?
+  geoLon          Float?
+  population      Int?
+  foundationYear  Int?
+  listings Listing[]
 }

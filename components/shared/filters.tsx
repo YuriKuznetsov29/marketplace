@@ -12,15 +12,7 @@ import { useQueryFilters } from '@/hooks/useQueryFilters'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { Search } from './search'
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from '../ui/pagination'
+import { PaginationListings } from './pagination-listings'
 
 interface FiltersProps {
     className?: string
@@ -230,29 +222,7 @@ export const Filters = ({ className, totalPages }: FiltersProps) => {
                     </div>
                 </div>
             </div>
-            <Pagination className="col-span-full">
-                <PaginationContent>
-                    <PaginationItem>
-                        <PaginationPrevious onClick={() => filters.setPage(filters.page - 1)} />
-                    </PaginationItem>
-                    {Array.from({ length: totalPages }).map((_, i) => (
-                        <PaginationItem key={i}>
-                            <PaginationLink
-                                onClick={() => filters.setPage(i + 1)}
-                                isActive={filters.page === i + 1}
-                            >
-                                {i + 1}
-                            </PaginationLink>
-                        </PaginationItem>
-                    ))}
-                    <PaginationItem>
-                        <PaginationEllipsis />
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationNext onClick={() => filters.setPage(filters.page + 1)} />
-                    </PaginationItem>
-                </PaginationContent>
-            </Pagination>
+            <PaginationListings filters={filters} totalPages={totalPages} />
         </>
     )
 }

@@ -4,15 +4,26 @@ import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { ClearButton } from './clear-button'
 import { Textarea } from '../ui/textarea'
+import { RequiredSymbol } from './required-symbol'
+import { FormMessage } from '../ui/form'
+import { cn } from '@/lib/utils'
 
 interface Props extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
     className?: string
     name: string
     label?: string
     required?: boolean
+    textareaClassName?: string
 }
 
-export const FormTextarea: React.FC<Props> = ({ className, name, label, required, ...props }) => {
+export const FormTextarea: React.FC<Props> = ({
+    className,
+    name,
+    label,
+    required,
+    textareaClassName,
+    ...props
+}) => {
     const {
         register,
         formState: { errors },
@@ -29,17 +40,23 @@ export const FormTextarea: React.FC<Props> = ({ className, name, label, required
 
     return (
         <div className={className}>
-            <p className="font-medium mb-2">
-                {label} {required && <span className="text-red-500">*</span>}
-            </p>
+            {label && (
+                <p className="mb-2 font-medium">
+                    {label} {required && <RequiredSymbol />}
+                </p>
+            )}
 
             <div className="relative">
-                <Textarea className="h-12 text-md" {...register(name)} {...props} />
+                <Textarea
+                    className={cn('min-h-[140px] resize-y leading-relaxed text-base', textareaClassName)}
+                    {...register(name)}
+                    {...props}
+                />
 
                 {value && <ClearButton onClick={onClickClear} />}
             </div>
 
-            {errorText && <p className="text-red-500 text-sm mt-2">{errorText}</p>}
+            {errorText && <FormMessage className="mt-2">{errorText}</FormMessage>}
         </div>
     )
 }

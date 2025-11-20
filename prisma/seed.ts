@@ -55,7 +55,7 @@ async function main() {
     const createdUsers = await prisma.user.findMany()
     const fuelTypes = ['GASOLINE', 'DIESEL', 'ELECTRIC', 'HYBRID']
     const gearboxTypes = ['MANUAL', 'AUTOMATIC']
-    const cities = ['Москва', 'Санкт-Петербург', 'Новосибирск', 'Екатеринбург', 'Казань']
+    const cities = [26, 67, 122, 224, 251, 510, 620, 770, 787, 1117]
 
     const random = (arr: any[]) => arr[Math.floor(Math.random() * arr.length)]
     const getRandomInt = (min: number, max: number) =>
@@ -80,13 +80,14 @@ async function main() {
                 year,
                 fuelType: random(fuelTypes),
                 gearbox: random(gearboxTypes),
-                location: random(cities),
+                // location: random(cities),
                 images: [
                     `https://loremflickr.com/800/600/car,${brandName},${modelName}?random=${i}`,
                 ],
                 sellerId: user.id,
                 brandId: brands[brandName].id,
                 modelId: models[brandName][modelName].id,
+                cityId: random(cities),
             },
         })
     }

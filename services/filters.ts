@@ -11,8 +11,6 @@ export const getModels = async (brands: string[]): Promise<Model[]> => {
         arrayFormat: 'comma',
     })
 
-    console.log(query)
-
     return (
         await axiosInstance.get<Model[]>(`/models/`, {
             params: { brands: query },

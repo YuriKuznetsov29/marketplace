@@ -93,7 +93,7 @@ export async function createListing(body: TFormListingValues) {
                 year: Number(body.year),
                 fuelType: body.fuelType,
                 gearbox: body.gearbox,
-                location: '',
+                // cityId: Number(body.city),
                 images: [newFileName],
                 seller: {
                     connect: {
@@ -108,6 +108,11 @@ export async function createListing(body: TFormListingValues) {
                 model: {
                     connect: {
                         id: body.model,
+                    },
+                },
+                city: {
+                    connect: {
+                        id: Number(body.city),
                     },
                 },
             },
@@ -162,11 +167,11 @@ export async function updateListing(body: TFormListingValues & { id: string }) {
                 description: body.description || '',
                 title: body.description,
                 price: body.price,
+                cityId: Number(body.city),
                 mileage: body.mileage,
                 year: Number(body.year),
                 fuelType: body.fuelType,
                 gearbox: body.gearbox,
-                location: '',
                 images: file?.name && newFileName ? [newFileName] : findListing.images,
             },
         })
