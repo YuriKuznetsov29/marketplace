@@ -13,7 +13,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/comp
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
 import { Button } from '../ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
-import { CitiesSelect } from './cities-select'
+import { FormCitiesSelect } from './cities-select/form-cities-select'
 import { FormInput } from './form-input'
 import { FormTextarea } from './form-textarea'
 import { TFormListingValues, listingSchema } from './schemas'
@@ -162,10 +162,40 @@ export const ListingForm = () => {
                                     />
                                 )}
 
-                                <CitiesSelect
+                                <FormCitiesSelect
                                     control={form.control}
                                     className="md:col-span-2 lg:col-span-1"
                                 />
+
+                                {/* <FormField
+            control={form.control}
+            name="city"
+            render={({ field }) => (
+                <FormItem className={cn('flex flex-col gap-2 md:col-span-2 lg:col-span-1')}>
+                    <FormLabel>Город</FormLabel>
+                    <Select value={field.value} onValueChange={(val) => field.onChange(val)}>
+                        <FormControl>
+                            <SelectTrigger className="h-12 w-full justify-between">
+                                <SelectValue placeholder={'Выберите город'}>{selectedLabel}</SelectValue>
+                            </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                            <Virtuoso
+                                style={{ height: 320 }}
+                                totalCount={cities.length}
+                                itemContent={(index) => {
+                                    const city = cities[index]
+                                    return (
+                                        <SelectItem key={city.id} value={String(city.id)}>
+                                            {city.city}
+                                        </SelectItem>
+                                    )
+                                }}
+                            />
+                        </SelectContent>
+                    </Select>
+                    <FormMessage />
+                </FormItem> */}
                             </div>
                         </section>
 

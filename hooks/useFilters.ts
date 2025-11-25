@@ -29,6 +29,7 @@ export interface QueryFilters extends PriceProps, MileageProps, YearProps {
     gearbox: string
     query: string
     page: number
+    city: string
 }
 
 export interface Filters {
@@ -41,6 +42,7 @@ export interface Filters {
     gearbox: Set<string>
     query: string
     page: number
+    city: string
 }
 
 export interface FiltersReturnProps extends Filters {
@@ -53,6 +55,7 @@ export interface FiltersReturnProps extends Filters {
     setQuery: (value: string) => void
     setPage: (value: number) => void
     setYear: (name: keyof YearProps, value: number) => void
+    setCity: (value: string) => void
 }
 
 export const useFilters = (): FiltersReturnProps => {
@@ -104,6 +107,8 @@ export const useFilters = (): FiltersReturnProps => {
         mileageTo: Number(searchParams.get('mileageTo')) || undefined,
     })
 
+    const [city, setCity] = useState(searchParams.get('city') || '')
+
     const updateMileage = (name: keyof MileageProps, value: number) => {
         setMileage((prev) => ({ ...prev, [name]: value }))
     }
@@ -121,6 +126,7 @@ export const useFilters = (): FiltersReturnProps => {
             year,
             query,
             page,
+            city,
             setBrands: (...args) => {
                 toggleBrands(...args)
             },
@@ -132,7 +138,19 @@ export const useFilters = (): FiltersReturnProps => {
             setYear: (...args) => resetPage(updateYear, ...args), // updateYear,
             setPage,
             setQuery: (...args) => resetPage(setQuery, ...args),
+            setCity: (...args) => resetPage(setCity, ...args),
         }),
-        [selectedBrands, selectedModels, prices, mileage, gearbox, fuelType, year, query, page]
+        [
+            selectedBrands,
+            selectedModels,
+            prices,
+            mileage,
+            gearbox,
+            fuelType,
+            year,
+            query,
+            page,
+            city,
+        ]
     )
 }

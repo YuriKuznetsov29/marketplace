@@ -6,15 +6,15 @@ import { Virtuoso } from 'react-virtuoso'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { cn } from '@/lib/utils'
 import { Api } from '@/services/api-client'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select'
 
-interface CitiesSelectProps extends FieldValues {
+interface FormCitiesSelectProps extends FieldValues {
     className?: string
     label?: string
     placeholder?: string
 }
 
-export const CitiesSelect: React.FC<CitiesSelectProps> = ({
+export const FormCitiesSelect: React.FC<FormCitiesSelectProps> = ({
     className,
     label = 'Город',
     placeholder = 'Выберите город',

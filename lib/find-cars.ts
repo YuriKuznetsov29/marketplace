@@ -13,6 +13,7 @@ export interface GetSearchParams {
     fuelType?: string
     gearbox?: string
     query?: string
+    city?: string
     page: number
     cursor?: string | null
     limit: number
@@ -38,6 +39,7 @@ export const findCars = async (params: Promise<GetSearchParams>) => {
         fuelType,
         gearbox,
         query,
+        city,
         page,
         limit,
     } = await params
@@ -54,10 +56,12 @@ export const findCars = async (params: Promise<GetSearchParams>) => {
     const pageNumber = page || 1
     const limitNumber = limit || 12
 
+    const cityId =
+        city !== undefined && city !== '-,1' ? Number(city.replaceAll(',', '')) : undefined
+
     const listings = await prisma.listing.findMany({
         take: limitNumber,
         skip: (pageNumber - 1) * limitNumber,
-        // cursor: cursor ? { id: cursor } : undefined,
         include: {
             brand: true,
             model: true,
@@ -91,6 +95,11 @@ export const findCars = async (params: Promise<GetSearchParams>) => {
             year: {
                 gte: minYear,
                 lte: maxYear,
+            },
+            city: {
+                is: {
+                    id: cityId,
+                },
             },
             OR: [
                 {
@@ -157,6 +166,11 @@ export const findCars = async (params: Promise<GetSearchParams>) => {
                 gte: minYear,
                 lte: maxYear,
             },
+            city: {
+                is: {
+                    id: cityId,
+                },
+            },
             OR: [
                 {
                     brand: {
@@ -194,8 +208,6 @@ export const findCars = async (params: Promise<GetSearchParams>) => {
     })
 
     const totalPages = Math.ceil(totalCount / 12)
-
-    console.log(listings, 'params in findCars')
 
     return { listings, totalPages }
 }

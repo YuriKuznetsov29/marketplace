@@ -17,6 +17,7 @@ export const useQueryFilters = (filters: Filters) => {
                 models: Array.from(filters.selectedModels),
                 fuelType: Array.from(filters.fuelType),
                 gearbox: Array.from(filters.gearbox),
+                city: Array.from(filters.city),
                 query: filters.query,
                 page: filters.page,
             }

@@ -13,6 +13,7 @@ import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { Search } from './search'
 import { PaginationListings } from './pagination-listings'
+import { CitiesSelect } from './cities-select/cities-select'
 
 interface FiltersProps {
     className?: string
@@ -110,6 +111,8 @@ export const Filters = ({ className, totalPages }: FiltersProps) => {
                         </Popover>
                     </div>
                 )}
+
+                <CitiesSelect value={filters.city} setValue={filters.setCity} />
 
                 <div className="flex flex-col gap-2">
                     <Label htmlFor={'price'}>Цена, ₽</Label>
