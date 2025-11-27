@@ -1,7 +1,6 @@
-import { Api } from '@/services/api-client'
-import { Brand, FuelType, GearboxType, Model } from '@prisma/client'
+import { FuelType, GearboxType } from '@prisma/client'
 import { useSearchParams } from 'next/navigation'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useSet } from 'react-use'
 
 export interface PriceProps {
