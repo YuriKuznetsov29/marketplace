@@ -5,6 +5,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
+import { handleApiError } from '@/lib/handle-api-error'
 import { Api } from '@/services/api-client'
 import React, { useEffect, useState } from 'react'
 import { Virtuoso } from 'react-virtuoso'
@@ -13,7 +14,7 @@ interface CitiesSelectProps {
     value: string
     setValue: (value: string) => void
 }
-export function CitiesSelect({ value, setValue, ...props }: CitiesSelectProps) {
+export function CitiesSelect({ value, setValue }: CitiesSelectProps) {
     const [cities, setCities] = useState<{ id: number; city: string }[]>([])
     const [valueName, setValueName] = useState('')
 
@@ -23,13 +24,16 @@ export function CitiesSelect({ value, setValue, ...props }: CitiesSelectProps) {
     }
 
     useEffect(() => {
-        Api.cities.getCities().then((res) => {
-            const normalized = res
-                .filter((c) => c.city && typeof c.id === 'number')
-                .map((c) => ({ id: c.id, city: c.city! }))
-                .sort((a, b) => a.city.localeCompare(b.city))
-            setCities([{ id: -1, city: 'Выберете город' }, ...normalized])
-        })
+        Api.cities
+            .getCities()
+            .then((res) => {
+                const normalized = res
+                    .filter((c) => c.city && typeof c.id === 'number')
+                    .map((c) => ({ id: c.id, city: c.city! }))
+                    .sort((a, b) => a.city.localeCompare(b.city))
+                setCities([{ id: -1, city: 'Выберете город' }, ...normalized])
+            })
+            .catch((err) => handleApiError(err))
     }, [])
 
     return (
