@@ -13,6 +13,7 @@ type ApiError = {
 }
 
 export function handleApiError(err: ApiError | NetworkError) {
+    console.error(err)
     if (err.type === 'network_error') {
         toast.error('Проблема с сетью, попробуйте позже')
         return

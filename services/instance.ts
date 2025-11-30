@@ -7,6 +7,8 @@ export const axiosInstance = axios.create({
 axiosInstance.interceptors.response.use(
     (res) => res,
     (err) => {
+        console.error(err)
+
         // Ошибка сети
         if (!err.response) {
             return Promise.reject({
