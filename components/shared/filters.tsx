@@ -11,7 +11,7 @@ import { useFiltersModels } from '@/hooks/useFiltersModels'
 import { useQueryFilters } from '@/hooks/useQueryFilters'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
-import { Search } from './search'
+import { Search } from './search/search'
 import { PaginationListings } from './pagination-listings'
 import { CitiesSelect } from './cities-select/cities-select'
 

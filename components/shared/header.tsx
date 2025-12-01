@@ -45,13 +45,13 @@ export const Header: React.FC<Props> = () => {
         <header className={'border-b mb-4'}>
             <Container className="flex items-center justify-between py-4">
                 {isAuthenticated && (
-                    <nav className="flex items-center gap-6">
+                    <nav className="flex items-center gap-6" data-testId="header">
                         {navigationItems.map((item) => {
                             const Icon = item.icon
                             const isActive =
                                 item.href === '/'
                                     ? pathname === '/'
-                                    : pathname.startsWith(item.href)
+                                    : pathname?.startsWith(item.href)
 
                             return (
                                 <Link

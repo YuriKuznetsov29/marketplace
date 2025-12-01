@@ -1,16 +1,8 @@
 'use client'
 import React, { useState } from 'react'
-import { Input } from '../ui/input'
-import { Button } from '../ui/button'
-import { useDebounce } from 'react-use'
-import { redirect, useRouter } from 'next/navigation'
-import { Api } from '@/services/api-client'
-import { Listing } from '@prisma/client'
-import { CarListing } from './car-listing'
-import { FiltersReturnProps, useFilters } from '@/hooks/useFilters'
-import { useQueryFilters } from '@/hooks/useQueryFilters'
-import { useQuerySearch } from '@/hooks/useQuerySearch'
-import { useSearch } from '@/hooks/useSearch'
+import { Input } from '../../ui/input'
+import { Button } from '../../ui/button'
+import { FiltersReturnProps } from '@/hooks/useFilters'
 
 interface Props {
     filters: FiltersReturnProps
