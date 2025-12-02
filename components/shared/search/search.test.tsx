@@ -1,80 +1,46 @@
 import { render, screen } from '@testing-library/react'
-// import mockRouter from 'next-router-mock'
-import { useFilters } from '@/hooks/useFilters'
+import { FiltersReturnProps, useFilters } from '@/hooks/useFilters'
 import { Search } from './search'
-import { Title } from '../title'
-
-// jest.mock('../../../lib/utils', () => ({
-//     cn: jest.fn((...args) => args.filter(Boolean).join(' ')),
-// }))
-
-// jest.mock('next/navigation', () => ({
-//     useSearchParams: () => new URLSearchParams('?page=1'),
-//     usePathname: () => '/search',
-//     useRouter: () => ({
-//         push: jest.fn(),
-//         replace: jest.fn(),
-//         back: jest.fn(),
-//         forward: jest.fn(),
-//         refresh: jest.fn(),
-//         prefetch: jest.fn(),
-//     }),
-// }))
-
-import { usePathname, useSearchParams, useRouter } from 'next/navigation'
-import { Header } from '../header'
-jest.mock('next/navigation')
-
-const getMock: jest.Mock = jest.fn().mockImplementation(() => '1')
-const toStringMock: jest.Mock = jest.fn()
-;(useSearchParams as jest.Mock).mockReturnValue({
-    get: getMock,
-    toString: toStringMock,
-})
-
-const routerPushMock: jest.Mock = jest.fn()
-;(useRouter as jest.Mock).mockReturnValue({
-    push: routerPushMock,
-})
-
-export const mockSession = {
-    expires: new Date(Date.now() + 2 * 86400).toISOString(),
-    user: { name: 'admin' },
+import { userEvent } from '@testing-library/user-event'
+const Wrapper = () => {
+    const filters = useFilters()
+    return <Search filters={filters} />
 }
-jest.mock('next-auth/react', () => {
-    const originalModule = jest.requireActual('next-auth/react')
-    return {
-        __esModule: true,
-        ...originalModule,
-        useSession: jest.fn(() => ({
-            data: mockSession,
-            status: 'authenticated',
-        })),
-    }
-})
-// Reference: https://github.com/nextauthjs/next-auth/discussions/4185#discussioncomment-2397318
-// We also need to mock the whole next-auth package, since it's used in
-// our various pages via the `export { getServerSideProps }` function.
-jest.mock('next-auth', () => ({
-    __esModule: true,
-    default: jest.fn(),
-    unstable_getServerSession: jest.fn(
-        () =>
-            new Promise((resolve) => {
-                resolve({
-                    expiresIn: undefined,
-                    loggedInAt: undefined,
-                    someProp: 'someString',
-                })
-            })
-    ),
-}))
 
 describe('Search', () => {
-    it('', () => {
-        // const filters = useFilters()
-        render(<Header />)
+    it('test render', () => {
+        render(<Wrapper />)
+        expect(screen.getByText('Search')).toBeInTheDocument()
+    })
 
-        expect(screen.getByTestId('header')).toBeInTheDocument()
+    it('test typing', async () => {
+        render(<Wrapper />)
+        expect(screen.getByText('Search')).toBeInTheDocument()
+
+        const input = screen.getByPlaceholderText('Введите запрос')
+
+        const user = userEvent.setup()
+        await user.type(input, 'test')
+
+        expect(input).toHaveValue('test')
+    })
+
+    it('calls filters.setQuery with current input value', async () => {
+        const mockFilters = {
+            setQuery: jest.fn(),
+        } as unknown as FiltersReturnProps
+
+        render(<Search filters={mockFilters} />)
+
+        const input = screen.getByPlaceholderText('Введите запрос')
+        const button = screen.getByText('Search')
+
+        const user = userEvent.setup()
+        await user.type(input, 'test')
+        await user.click(button)
+
+        expect(input).toHaveValue('test')
+        expect(mockFilters.setQuery).toHaveBeenCalledWith('test')
+        expect(mockFilters.setQuery).toHaveBeenCalledTimes(1)
     })
 })
