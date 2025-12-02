@@ -55,6 +55,7 @@ export interface FiltersReturnProps extends Filters {
     setPage: (value: number) => void
     setYear: (name: keyof YearProps, value: number) => void
     setCity: (value: string) => void
+    clearModels: () => void
 }
 
 export const useFilters = (): FiltersReturnProps => {
@@ -71,7 +72,7 @@ export const useFilters = (): FiltersReturnProps => {
         new Set<string>(searchParams.get('brands')?.split(','))
     )
 
-    const [selectedModels, { toggle: toggleModels }] = useSet(
+    const [selectedModels, { toggle: toggleModels, clear: clearModels }] = useSet(
         new Set<string>(searchParams.get('models')?.split(','))
     )
 
@@ -138,6 +139,7 @@ export const useFilters = (): FiltersReturnProps => {
             setPage,
             setQuery: (...args) => resetPage(setQuery, ...args),
             setCity: (...args) => resetPage(setCity, ...args),
+            clearModels: () => resetPage(clearModels),
         }),
         [
             selectedBrands,

@@ -1,5 +1,3 @@
-import { useSearchParams, useRouter } from 'next/navigation'
-
 // jest.mock('next/navigation')
 
 // ;(useSearchParams as jest.Mock).mockReturnValue({

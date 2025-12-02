@@ -1,5 +1,5 @@
 import { Api } from '@/services/api-client'
-import { Brand, Model } from '@prisma/client'
+import { Model } from '@prisma/client'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 

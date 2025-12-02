@@ -42,7 +42,7 @@ export const Filters = ({ className, totalPages }: FiltersProps) => {
                             <Button
                                 id="brand"
                                 variant="outline"
-                                className="w-64 block truncate text-left"
+                                className="w-full block truncate text-left"
                             >
                                 {filters.selectedBrands.size > 0
                                     ? Array.from(filters.selectedBrands).join(', ')
@@ -58,6 +58,7 @@ export const Filters = ({ className, totalPages }: FiltersProps) => {
                                             checked={filters.selectedBrands.has(brand.name)}
                                             onCheckedChange={() => {
                                                 filters.setBrands(brand.name)
+                                                filters.clearModels()
                                             }}
                                             id={`checkbox-${String(brand.name)}-${String(brand.id)}`}
                                         />
@@ -80,7 +81,7 @@ export const Filters = ({ className, totalPages }: FiltersProps) => {
                                 <Button
                                     id={'model'}
                                     variant="outline"
-                                    className="w-64 block truncate text-left"
+                                    className="w-full block truncate text-left"
                                 >
                                     {filters.selectedModels.size > 0
                                         ? Array.from(filters.selectedModels).join(', ')

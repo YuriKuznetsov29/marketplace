@@ -9,7 +9,7 @@ export const CarListingSkeleton: React.FC = () => {
                     <Skeleton className="h-6 w-3/4" />
                     <Skeleton className="h-4 w-full" />
                 </div>
-                <Skeleton className="mt-4 h-[200px] w-[300px]" />
+                <Skeleton className="mt-4 h-[200px] w-full" />
             </CardHeader>
             <CardContent className="space-y-2">
                 <Skeleton className="h-5 w-24" />

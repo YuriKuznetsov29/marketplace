@@ -13,7 +13,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/comp
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
 import { Button } from '../ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
-import { CitiesSelect } from './cities-select/form-cities-select'
+import { FormCitiesSelect } from './cities-select/form-cities-select'
 import { FormInput } from './form-input'
 import { FormTextarea } from './form-textarea'
 import { fuelOptions, gearboxOptions } from './constants/listing-options'
@@ -166,7 +166,7 @@ export const UpdateListingForm: React.FC<Props> = ({ listing }) => {
                                     />
                                 )}
 
-                                <CitiesSelect
+                                <FormCitiesSelect
                                     control={form.control}
                                     className="md:col-span-2 lg:col-span-1"
                                     placeholder="Выберите город размещения"
