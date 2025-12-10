@@ -1,0 +1,30 @@
+-- CreateTable
+CREATE TABLE "City" (
+    "id" SERIAL NOT NULL,
+    "address" TEXT NOT NULL,
+    "postalCode" TEXT,
+    "country" TEXT,
+    "federalDistrict" TEXT,
+    "regionType" TEXT,
+    "region" TEXT,
+    "areaType" TEXT,
+    "area" TEXT,
+    "cityType" TEXT,
+    "city" TEXT,
+    "settlementType" TEXT,
+    "settlement" TEXT,
+    "kladrId" TEXT,
+    "fiasId" TEXT,
+    "fiasLevel" INTEGER,
+    "capitalMarker" INTEGER,
+    "okato" TEXT,
+    "oktmo" TEXT,
+    "taxOffice" TEXT,
+    "timezone" TEXT,
+    "geoLat" DOUBLE PRECISION,
+    "geoLon" DOUBLE PRECISION,
+    "population" INTEGER,
+    "foundationYear" INTEGER,
+
+    CONSTRAINT "City_pkey" PRIMARY KEY ("id")
+);
