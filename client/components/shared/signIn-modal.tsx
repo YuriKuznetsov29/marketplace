@@ -1,21 +1,11 @@
 'use client'
 
-import { z } from 'zod'
 import { Dialog, DialogContent } from '../ui/dialog'
-import { Form, FormControl, FormField, FormItem } from '../ui/form'
-import { Input } from '../ui/input'
-import { useForm, FormProvider } from 'react-hook-form'
 import { Button } from '../ui/button'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useSession, signOut, signIn } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import { RegisterForm } from './regirster-form'
 import { useState } from 'react'
 import { SignInForm } from './signIn-form'
-
-const formSchema = z.object({
-    email: z.string().email(),
-    password: z.string().min(6),
-})
 
 interface Props {
     open: boolean

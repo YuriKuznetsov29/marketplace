@@ -1,10 +1,9 @@
 import { Container } from '@/components/shared/container'
 import { Header } from '@/components/shared/header'
 import { prisma } from '@/prisma/prisma-client'
-import { notFound, redirect } from 'next/navigation'
-import { ListingDetail } from '@/components/shared/listing-detail'
+import { redirect } from 'next/navigation'
 import { getUserSession } from '@/components/shared/constants/get-user-session'
-import Chat from '@/components/shared/chat'
+import Chat from '@/components/shared/chat/chat'
 
 interface Params {
     params: Promise<{

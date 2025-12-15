@@ -1,11 +1,8 @@
 import React from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { FormControl, FormField, FormItem } from '../ui/form'
-import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { signIn } from 'next-auth/react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 import { TFormLoginValues, loginSchema } from './schemas'
 import { FormInput } from './form-input'
 

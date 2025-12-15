@@ -25,6 +25,7 @@ export default async function ListingPage({ params }: Params) {
                     phone: true,
                 },
             },
+            city: true,
         },
     })
 

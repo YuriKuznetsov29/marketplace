@@ -26,7 +26,7 @@ const DEFAULT_MAX_MILEAGE = 10000000
 const DEFAULT_MIN_YEAR = 1900
 const DEFAULT_MAX_YEAR = new Date().getFullYear()
 
-export const findCars = async (params: Promise<GetSearchParams>) => {
+export const findCars = async (params: Promise<GetSearchParams> | GetSearchParams) => {
     const {
         brands,
         models,

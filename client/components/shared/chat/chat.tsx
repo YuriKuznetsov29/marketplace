@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
 import { getMessages } from '@/app/api/actions'
+import { formatTime, renderMessageText } from './helpers'
 
 type ChatMessage = Message & { senderId?: string }
 
@@ -17,9 +18,7 @@ interface ChatProps {
     lastMessages: ChatMessage[]
 }
 
-export default function Chat({ chatId, userId, lastMessages }: ChatProps) {
-    const URL_REGEX = /(https?:\/\/[^\s]+)/gi
-
+export default function Chat({ chatId, userId }: ChatProps) {
     const [cursor, setCursor] = useState<string | null>(null)
     const [messages, setMessages] = useState<ChatMessage[]>([])
     const [text, setText] = useState('')
@@ -27,67 +26,54 @@ export default function Chat({ chatId, userId, lastMessages }: ChatProps) {
     const messagesEndRef = useRef<HTMLDivElement>(null)
     const messagesStartRef = useRef<HTMLDivElement>(null)
     const messagesContainerRef = useRef<HTMLDivElement>(null)
+    const firstMessageRef = useRef<HTMLDivElement>(null)
+    const didInitialFetch = useRef(false)
+    const isPaginationRef = useRef(false)
+
+    const messageLimit = 20
 
     useInfiniteScroll({
         wrapperRef: messagesContainerRef,
         triggerRef: messagesStartRef,
-        callback: () => setCursor(messages[messages.length - 1].id),
+        callback: () => {
+            if (messages.length === 0) return
+            setCursor(messages[0].id)
+        },
     })
 
     const companionId =
         messages.find((m) => (m.senderId ?? m.userId) !== userId)?.senderId ??
         messages.find((m) => m.userId !== userId)?.userId
     const companionName = companionId ? `Собеседник ${companionId.slice(0, 6)}` : 'Собеседник'
-    const lastMessage = messages[messages.length - 1]
-
-    const formatTime = (date?: Date | string) => {
-        if (!date) return ''
-        return new Date(date).toLocaleTimeString('ru-RU', {
-            hour: '2-digit',
-            minute: '2-digit',
-        })
-    }
-
-    const renderMessageText = (content: string) => {
-        return content.split(URL_REGEX).map((part, index) => {
-            const isUrl = /^https?:\/\/\S+$/i.test(part)
-
-            if (isUrl) {
-                return (
-                    <a
-                        key={`url-${part}-${index}`}
-                        href={part}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-primary underline underline-offset-2 break-all hover:text-primary/80 transition-colors"
-                    >
-                        {part}
-                    </a>
-                )
-            }
-
-            return (
-                <span key={`text-${index}`} className="break-words">
-                    {part}
-                </span>
-            )
-        })
-    }
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+        messagesEndRef.current?.scrollIntoView()
     }
 
     useEffect(() => {
-        getMessages(chatId, cursor).then((messages) => {
-            console.log(messages)
-            setMessages((prev) => [...prev, ...messages])
+        if (cursor === null && didInitialFetch.current) return
+
+        if (cursor === null) {
+            didInitialFetch.current = true
+        }
+
+        getMessages(chatId, cursor, messageLimit).then((messages) => {
+            setMessages((prev) => [...messages, ...prev])
+            firstMessageRef.current?.scrollIntoView()
+            isPaginationRef.current = true
         })
     }, [cursor])
 
-    // useEffect(() => {
-    //     scrollToBottom()
-    // }, [messages])
+    useEffect(() => {
+        if (messages.length === messageLimit) scrollToBottom()
+
+        if (isPaginationRef.current) {
+            isPaginationRef.current = false
+            return
+        }
+
+        scrollToBottom()
+    }, [messages])
 
     useEffect(() => {
         const es = new EventSource(`${process.env.NEXT_PUBLIC_CHAT_API_URL}chat/${chatId}/stream`)
@@ -126,16 +112,7 @@ export default function Chat({ chatId, userId, lastMessages }: ChatProps) {
     return (
         <Card className="flex flex-col h-[600px] w-full max-w-2xl mx-auto shadow-lg">
             <CardHeader className="border-b pb-4">
-                <div className="flex flex-col gap-1">
-                    <CardTitle className="text-xl font-semibold">{companionName}</CardTitle>
-                    {lastMessage && (
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <span className="truncate max-w-[220px]">{lastMessage.text}</span>
-                            <span className="text-xs text-muted-foreground/80">•</span>
-                            <span className="text-xs">{formatTime(lastMessage.createdAt)}</span>
-                        </div>
-                    )}
-                </div>
+                <CardTitle className="text-xl font-semibold">{companionName}</CardTitle>
             </CardHeader>
 
             <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
@@ -146,11 +123,12 @@ export default function Chat({ chatId, userId, lastMessages }: ChatProps) {
                             <p className="text-sm">Пока нет сообщений. Начните общение!</p>
                         </div>
                     ) : (
-                        messages.map((m) => {
+                        messages.map((m, i) => {
                             const messageSenderId = m.senderId ?? m.userId
                             const isOwnMessage = messageSenderId === userId
                             return (
                                 <div
+                                    ref={i === 0 ? firstMessageRef : undefined}
                                     key={m.id}
                                     className={cn(
                                         'flex w-full mb-2',
@@ -185,10 +163,7 @@ export default function Chat({ chatId, userId, lastMessages }: ChatProps) {
                                                     isOwnMessage ? 'text-right' : 'text-left'
                                                 )}
                                             >
-                                                {new Date(m.createdAt).toLocaleTimeString('ru-RU', {
-                                                    hour: '2-digit',
-                                                    minute: '2-digit',
-                                                })}
+                                                {formatTime(m.createdAt)}
                                             </div>
                                         )}
                                     </div>

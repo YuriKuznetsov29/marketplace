@@ -5,8 +5,14 @@ import { UpdateListingForm } from '@/components/shared/update-listing-form'
 import { prisma } from '@/prisma/prisma-client'
 import { redirect } from 'next/navigation'
 
-export default async function UpdateListingPage({ params }: { params: { id: string } }) {
-    const { id } = params
+interface UpdateListingPageProps {
+    params: Promise<{
+        id: string
+    }>
+}
+
+export default async function UpdateListingPage({ params }: UpdateListingPageProps) {
+    const { id } = await params
 
     const session = await getUserSession()
 

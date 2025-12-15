@@ -1,4 +1,4 @@
-import { AuthOptions } from 'next-auth'
+import { AuthOptions, User } from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
 import CredentialProvider from 'next-auth/providers/credentials'
 import { prisma } from '@/prisma/prisma-client'
@@ -25,7 +25,7 @@ export const authOptions: AuthOptions = {
                 email: { label: 'Username', type: 'text' },
                 password: { label: 'Password', type: 'password' },
             },
-            async authorize(credentials) {
+            async authorize(credentials): Promise<User | null> {
                 if (!credentials) return null
 
                 const values = { email: credentials.email }
@@ -41,10 +41,10 @@ export const authOptions: AuthOptions = {
                 if (!isPasswordValid) return null
 
                 return {
-                    id: findUser.id,
+                    id: Number(findUser.id),
                     email: findUser.email,
                     name: findUser.name,
-                    role: findUser.role,
+                    // role: findUser.role,
                 }
             },
         }),
@@ -96,14 +96,17 @@ export const authOptions: AuthOptions = {
                         providerId: account?.providerAccountId,
                     },
                 })
+
+                return true
             } catch (error) {
+                console.log(error)
                 return false
             }
         },
         jwt: async ({ token }) => {
             const findUser = await prisma.user.findFirst({
                 where: {
-                    email: token.email,
+                    email: String(token.email),
                 },
             })
 

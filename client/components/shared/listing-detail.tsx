@@ -1,4 +1,4 @@
-import { Listing, Brand, Model, User } from '@prisma/client'
+import { Listing, Brand, Model, User, City } from '@prisma/client'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { getUserSession } from './constants/get-user-session'
 import { CreateChat } from './create-chat'
@@ -7,6 +7,7 @@ interface ListingWithRelations extends Listing {
     brand: Brand
     model: Model
     seller: Pick<User, 'id' | 'name' | 'phone'>
+    city: City
 }
 
 interface ListingDetailProps {
@@ -75,7 +76,7 @@ export const ListingDetail: React.FC<ListingDetailProps> = async ({ listing }) =
                         </div>
                         <div>
                             <span className="text-sm text-muted-foreground">Местоположение</span>
-                            <p className="font-semibold">{listing.location}</p>
+                            <p className="font-semibold">{listing.city.city}</p>
                         </div>
                     </div>
 

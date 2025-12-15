@@ -5,17 +5,25 @@ import { TFormListingValues } from '@/components/shared/schemas'
 import { prisma } from '@/prisma/prisma-client'
 import { Prisma } from '@prisma/client'
 import { hashSync } from 'bcrypt'
+import fs from 'fs'
+import path from 'path'
 
-export async function getMessages(chatId: string, cursor: string | null) {
+export async function getMessages(
+    chatId: string,
+    cursor: string | null,
+    messageLimit: number = 20
+) {
     const messages = await prisma.message.findMany({
         where: { chatId },
-        take: 20,
+        take: messageLimit,
         skip: cursor ? 1 : 0,
         cursor: cursor ? { id: String(cursor) } : undefined,
+        orderBy: { createdAt: 'desc' },
     })
 
-    return messages
+    return messages.reverse()
 }
+
 export async function createChat(userIds: string[]) {
     const chat = await prisma.chat.findFirst({
         where: {
@@ -112,8 +120,8 @@ export async function createListing(body: TFormListingValues) {
         const newFileName = `${uniqueSuffix}-${file.name}`
         const uploadDir = './public/uploads'
 
-        const fs = require('fs')
-        const path = require('path')
+        // const fs = require('fs')
+        // const path = require('path')
         fs.mkdirSync(path.join(process.cwd(), uploadDir), { recursive: true })
 
         const filePath = path.join(process.cwd(), uploadDir, newFileName)
@@ -187,8 +195,8 @@ export async function updateListing(body: TFormListingValues & { id: string }) {
             newFileName = `${uniqueSuffix}-${file.name}`
             const uploadDir = './public/uploads'
 
-            const fs = require('fs')
-            const path = require('path')
+            // const fs = require('fs')
+            // const path = require('path')
 
             const filePath = path.join(process.cwd(), uploadDir, newFileName)
             const buffer = await file.arrayBuffer()

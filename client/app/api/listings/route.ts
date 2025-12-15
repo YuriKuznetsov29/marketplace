@@ -1,6 +1,5 @@
 import { findCars, GetSearchParams } from '@/lib/find-cars'
 import { NextRequest, NextResponse } from 'next/server'
-import qs from 'qs'
 
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url)
@@ -22,9 +21,6 @@ export async function GET(req: NextRequest) {
         limit: Number(searchParams.get('limit') || 12),
     }
 
-    const query = qs.stringify(params, {
-        arrayFormat: 'comma',
-    })
     const listings = await findCars(params)
     return NextResponse.json(listings)
 }
