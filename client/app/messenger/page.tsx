@@ -1,9 +1,9 @@
-import { Container } from '@/components/shared/container'
-import { Header } from '@/components/shared/header'
-import { getUserSession } from '@/components/shared/constants/get-user-session'
+import { Container } from '@/widgets/container/container'
+import { Header } from '@/widgets/header/ui/header'
+import { getUserSession } from '@/shared/constants/get-user-session'
 import { prisma } from '@/prisma/prisma-client'
 import { redirect } from 'next/navigation'
-import { Messenger } from '@/components/shared/messenger'
+import { Messenger } from '@/features/messenger/ui/messenger'
 
 export default async function MessengerPage() {
     const session = await getUserSession()
@@ -23,7 +23,7 @@ export default async function MessengerPage() {
 
     return (
         <>
-            <Header />
+             />
             <main className="w-full">
                 <Container className="py-8 flex flex-col gap-4  px-4">
                     <div className="flex items-center justify-between">

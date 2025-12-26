@@ -1,7 +1,6 @@
-import { getUserSession } from '@/components/shared/constants/get-user-session'
-import { Container } from '@/components/shared/container'
-import { Header } from '@/components/shared/header'
-import { UpdateListingForm } from '@/components/shared/update-listing-form'
+import { getUserSession } from '@/shared/constants/get-user-session'
+import { Container } from '@/widgets/container/container'
+import { UpdateListingForm } from '@/features/listing-form/ui/update-listing-form'
 import { prisma } from '@/prisma/prisma-client'
 import { redirect } from 'next/navigation'
 
@@ -34,7 +33,6 @@ export default async function UpdateListingPage({ params }: UpdateListingPagePro
 
     return (
         <>
-            <Header />
             <Container>
                 <UpdateListingForm listing={listing} />{' '}
             </Container>

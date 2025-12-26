@@ -1,8 +1,7 @@
-import { Container } from '@/components/shared/container'
-import { Header } from '@/components/shared/header'
+import { Container } from '@/widgets/container/container'
 import { prisma } from '@/prisma/prisma-client'
 import { notFound } from 'next/navigation'
-import { ListingDetail } from '@/components/shared/listing-detail'
+import { ListingDetail } from '@/entities/listing/ui/listing-detail'
 
 interface Params {
     params: Promise<{
@@ -35,7 +34,6 @@ export default async function ListingPage({ params }: Params) {
 
     return (
         <>
-            <Header />
             <main className="w-full">
                 <Container className="py-8 px-4">
                     <ListingDetail listing={listing} />

@@ -1,9 +1,11 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
-import { Providers } from '@/components/shared/providers'
-import './globals.css'
 import { Toaster } from 'react-hot-toast'
-import { Footer } from '@/components/shared/footer'
+import { Footer } from '@/widgets/footer'
+import { Providers } from '@/shared/providers/providers'
+import './globals.css'
+import { Header } from '@/widgets/header'
+import { HeaderContent } from '@/entities/header-content'
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -30,6 +32,9 @@ export default function RootLayout({
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
                 <Providers>
                     <div className="min-h-screen flex flex-col">
+                        <Header>
+                            <HeaderContent />
+                        </Header>
                         <div className="flex-1 flex flex-col">{children}</div>
                         <Footer />
                     </div>

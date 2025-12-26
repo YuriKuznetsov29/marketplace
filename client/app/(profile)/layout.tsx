@@ -1,6 +1,5 @@
-import { Container } from '@/components/shared/container'
+import { Container } from '@/widgets/container/container'
 import { Metadata } from 'next'
-import { Header } from '@/components/shared/header'
 
 export const metadata: Metadata = {
     title: 'Profile',
@@ -10,7 +9,6 @@ export const metadata: Metadata = {
 export default function ProfileLayout({ children }: { children: React.ReactNode }) {
     return (
         <>
-            <Header />
             <main className="w-full">
                 <Container>{children}</Container>
             </main>

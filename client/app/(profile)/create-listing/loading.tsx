@@ -1,11 +1,11 @@
-import { Container } from '@/components/shared/container'
-import { Header } from '@/components/shared/header'
+import { Container } from '@/widgets/container/container'
+import { Header } from '@/widgets/header/ui/header'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export default function Loading() {
     return (
         <>
-            <Header />
+             />
             <main className="w-full">
                 <Container className="py-8 space-y-4">
                     <Skeleton className="h-8 w-48" />
@@ -24,4 +24,3 @@ export default function Loading() {
         </>
     )
 }
-

@@ -1,9 +1,9 @@
-import { Container } from '@/components/shared/container'
-import { Header } from '@/components/shared/header'
+import { Container } from '@/widgets/container/container'
+import { Header } from '@/widgets/header/ui/header'
 import { prisma } from '@/prisma/prisma-client'
 import { redirect } from 'next/navigation'
-import { getUserSession } from '@/components/shared/constants/get-user-session'
-import Chat from '@/components/shared/chat/chat'
+import { getUserSession } from '@/shared/constants/get-user-session'
+import Chat from '@/features/messenger/ui/chat'
 
 interface Params {
     params: Promise<{
@@ -24,7 +24,7 @@ export default async function ChatPage({ params }: Params) {
 
     return (
         <>
-            <Header />
+             />
             <main className="w-full">
                 <Container className="py-8">
                     <Chat chatId={id} userId={session.id} lastMessages={messages} />

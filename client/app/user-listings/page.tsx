@@ -1,7 +1,7 @@
-import { CarListing } from '@/components/shared/car-listing'
-import { getUserSession } from '@/components/shared/constants/get-user-session'
-import { Container } from '@/components/shared/container'
-import { Header } from '@/components/shared/header'
+import { CarListing } from '@/entities/listing/ui/car-listing'
+import { getUserSession } from '@/shared/constants/get-user-session'
+import { Container } from '@/widgets/container/container'
+import { Header } from '@/widgets/header/ui/header'
 import { prisma } from '@/prisma/prisma-client'
 import { redirect } from 'next/navigation'
 import React from 'react'
@@ -30,7 +30,7 @@ export default async function UserListings() {
 
     return (
         <>
-            <Header />
+             />
             <Container className="py-8 px-4">
                 <div className="w-full flex flex-col md:grid  md:grid-cols-3 gap-4">
                     {listings.length > 0 &&

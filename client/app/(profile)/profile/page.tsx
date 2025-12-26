@@ -1,6 +1,6 @@
-import { getUserSession } from '@/components/shared/constants/get-user-session'
-import { Container } from '@/components/shared/container'
-import { ProfileForm } from '@/components/shared/profile-form'
+import { getUserSession } from '@/shared/constants/get-user-session'
+import { Container } from '@/widgets/container/container'
+import { ProfileForm } from '@/shared/profile-form'
 import { prisma } from '@/prisma/prisma-client'
 import { redirect } from 'next/navigation'
 

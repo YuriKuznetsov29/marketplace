@@ -1,7 +1,12 @@
 import axios from 'axios'
 
+const baseURL =
+    process.env.NODE_ENV === 'development'
+        ? process.env.NEXT_PUBLIC_API_URL
+        : process.env.NEXT_PUBLIC_API_URL_PROD
+
 export const axiosInstance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    baseURL,
 })
 
 axiosInstance.interceptors.response.use(
