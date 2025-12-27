@@ -1,11 +1,9 @@
-import { Container } from '@/widgets/container/container'
-import { Header } from '@/widgets/header/ui/header'
+import { Container } from '@/widgets/container'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export default function Loading() {
     return (
         <>
-             />
             <main className="w-full">
                 <Container className="py-8 flex flex-col gap-4">
                     <Skeleton className="h-7 w-32" />

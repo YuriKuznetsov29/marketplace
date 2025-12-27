@@ -1,4 +1,4 @@
-import { Container } from '@/widgets/container/container'
+import { Container } from '@/widgets/container'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export default function Loading() {

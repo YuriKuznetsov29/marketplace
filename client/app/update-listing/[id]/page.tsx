@@ -1,6 +1,6 @@
-import { getUserSession } from '@/shared/constants/get-user-session'
-import { Container } from '@/widgets/container/container'
-import { UpdateListingForm } from '@/features/listing-form/ui/update-listing-form'
+import { getUserSession } from '@/shared/constants'
+import { Container } from '@/widgets/container'
+import { UpdateListingForm } from '@/features/listing-form'
 import { prisma } from '@/prisma/prisma-client'
 import { redirect } from 'next/navigation'
 

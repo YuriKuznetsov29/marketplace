@@ -1,13 +1,11 @@
 // app/loading.tsx
-import { CarListingSkeleton } from '@/entities/listing/ui/car-listing-skeleton'
-import { Container } from '@/widgets/container/container'
-import { Header } from '@/widgets/header/ui/header'
+import { CarListingSkeleton } from '@/entities/listing'
+import { Container } from '@/widgets/container'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export default function Loading() {
     return (
         <>
-             />
             <main className="w-full">
                 <Container>
                     <div className="w-full grid grid-cols-[300px_1fr] gap-4">

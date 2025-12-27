@@ -1,6 +1,6 @@
-import { Container } from '@/widgets/container/container'
-import { Filters } from '@/features/filters/filters'
-import { ListingsList } from '@/entities/listing/ui/listings-list'
+import { Container } from '@/widgets/container'
+import { Filters } from '@/features/filters'
+import { ListingsList } from '@/entities/listing'
 import { findCars, GetSearchParams } from '@/lib/find-cars'
 
 export default async function Home({ searchParams }: { searchParams: Promise<GetSearchParams> }) {

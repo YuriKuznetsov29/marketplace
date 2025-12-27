@@ -9,11 +9,11 @@ import { useFilters } from '@/hooks/useFilters'
 import { useFiltersBrands } from '@/hooks/useFiltersBrands'
 import { useFiltersModels } from '@/hooks/useFiltersModels'
 import { useQueryFilters } from '@/hooks/useQueryFilters'
-import { Label } from '../../components/ui/label'
-import { Input } from '../../components/ui/input'
-import { Search } from '../search/ui/search'
-import { PaginationListings } from '../pagintion-listing/ui/pagination-listings'
-import { CitiesSelect } from '../../shared/cities-select/cities-select'
+import { Label } from '../../../components/ui/label'
+import { Input } from '../../../components/ui/input'
+import { Search } from '../../search/ui/search'
+import { PaginationListings } from '../../pagintion-listing/ui/pagination-listings'
+import { CitiesSelect } from '../../../shared/cities-select/cities-select'
 
 interface FiltersProps {
     className?: string

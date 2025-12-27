@@ -1,7 +1,7 @@
 'use server'
 
-import { getUserSession } from '@/shared/constants/get-user-session'
-import { TFormListingValues } from '@/features/auth/model/schemas'
+import { getUserSession } from '@/shared/constants'
+import { TFormListingValues } from '@/features/auth'
 import { prisma } from '@/prisma/prisma-client'
 import { Prisma } from '@prisma/client'
 import { hashSync } from 'bcrypt'

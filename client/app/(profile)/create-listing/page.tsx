@@ -1,9 +1,9 @@
-import { getUserSession } from '@/shared/constants/get-user-session'
-import { Container } from '@/widgets/container/container'
-import { ListingForm } from '@/features/listing-form/ui/listing-form'
+import React from 'react'
+import { getUserSession } from '@/shared/constants'
+import { Container } from '@/widgets/container/'
+import { ListingForm } from '@/features/listing-form'
 import { prisma } from '@/prisma/prisma-client'
 import { redirect } from 'next/navigation'
-import React from 'react'
 
 export default async function CreateListing() {
     const session = await getUserSession()

@@ -6,6 +6,7 @@ import { signIn } from 'next-auth/react'
 import { RegisterForm } from './regirster-form'
 import { useState } from 'react'
 import { SignInForm } from './signIn-form'
+import { Filters } from '@/features/filters/ui/filters'
 
 interface Props {
     open: boolean

@@ -1,7 +1,7 @@
-import { Container } from '@/widgets/container/container'
+import { Container } from '@/widgets/container'
 import { prisma } from '@/prisma/prisma-client'
 import { notFound } from 'next/navigation'
-import { ListingDetail } from '@/entities/listing/ui/listing-detail'
+import { ListingDetail } from '@/entities/listing'
 
 interface Params {
     params: Promise<{

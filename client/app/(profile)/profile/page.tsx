@@ -1,8 +1,8 @@
-import { getUserSession } from '@/shared/constants/get-user-session'
-import { Container } from '@/widgets/container/container'
-import { ProfileForm } from '@/shared/profile-form'
+import { getUserSession } from '@/shared/constants'
+import { Container } from '@/widgets/container'
 import { prisma } from '@/prisma/prisma-client'
 import { redirect } from 'next/navigation'
+import { ProfileForm } from '@/features/profile'
 
 export default async function Profile() {
     const session = await getUserSession()

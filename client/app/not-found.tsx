@@ -1,12 +1,10 @@
-import { Container } from '@/widgets/container/container'
-import { Header } from '@/widgets/header/ui/header'
+import { Container } from '@/widgets/container'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
 export default function NotFound() {
     return (
         <>
-             />
             <main className="w-full">
                 <Container className="py-16 text-center">
                     <h1 className="text-6xl font-bold mb-4">404</h1>

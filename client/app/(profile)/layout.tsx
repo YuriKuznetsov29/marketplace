@@ -1,4 +1,4 @@
-import { Container } from '@/widgets/container/container'
+import { Container } from '@/widgets/container'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
